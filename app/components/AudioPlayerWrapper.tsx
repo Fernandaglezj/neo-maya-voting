@@ -22,10 +22,13 @@ export default function AudioPlayerWrapper() {
     // para evitar problemas de hidratación en Next.js
     const checkPreference = () => {
       try {
+        // Limpiar preferencia anterior para forzar que aparezca el modal (quitar en producción)
+        localStorage.removeItem('audioPreference')
+        
         const userChoice = localStorage.getItem('audioPreference')
         console.log("Preferencia de audio encontrada:", userChoice)
         
-        if (userChoice) {
+        if (userChoice !== null) {
           setHasUserChosen(true)
           setShowPlayer(true)
           if (userChoice === 'true') {
@@ -35,23 +38,22 @@ export default function AudioPlayerWrapper() {
           }
         } else {
           // Si no hay preferencia, mostrar el prompt después de un breve retraso
-          setTimeout(() => {
-            setShowPrompt(true)
-          }, 1500)
+          console.log("No se encontró preferencia de audio, mostrando prompt...")
+          // Mostrar el prompt inmediatamente
+          setShowPrompt(true)
         }
       } catch (error) {
         console.error("Error al acceder a localStorage:", error)
         // En caso de error, mostrar el prompt por defecto
-        setTimeout(() => {
-          setShowPrompt(true)
-        }, 1500)
+        setShowPrompt(true)
       }
     }
     
     // Ejecutar después de que el componente se monte completamente
     // Esto ayuda con los problemas de SSR/hidratación en Next.js
     if (typeof window !== 'undefined') {
-      setTimeout(checkPreference, 100)
+      // Ejecutar casi inmediatamente para que aparezca rápido
+      setTimeout(checkPreference, 10)
     }
     
     return () => {
@@ -100,7 +102,24 @@ export default function AudioPlayerWrapper() {
   }
   
   const toggleAudio = () => {
-    if (!audioElement) return
+    if (!audioElement) {
+      // Si no hay elemento de audio, crearlo
+      const audio = new Audio('/audio/mayan-ambience.mp3')
+      audio.loop = true
+      setAudioElement(audio)
+      
+      const playPromise = audio.play()
+      if (playPromise !== undefined) {
+        playPromise
+          .then(() => {
+            setIsPlaying(true)
+          })
+          .catch(err => {
+            console.error("Error al reproducir audio:", err)
+          })
+      }
+      return
+    }
     
     if (isPlaying) {
       audioElement.pause()
