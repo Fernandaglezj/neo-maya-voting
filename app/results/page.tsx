@@ -38,7 +38,7 @@ type PersonElement = {
 }
 
 export default function ResultsPage() {
-  const [activeTab, setActiveTab] = useState<"elemento" | "categoria" | "palmar">("elemento")
+  const [activeTab, setActiveTab] = useState<"elemento" | "palmar">("elemento")
   const [loading, setLoading] = useState<boolean>(true)
   const [elementosUsuarios, setElementosUsuarios] = useState<PersonElement[]>([])
   const [invitadosPalMar, setInvitadosPalMar] = useState<any[]>([])
@@ -274,16 +274,6 @@ export default function ResultsPage() {
                 Por Elemento
               </button>
               <button 
-                onClick={() => setActiveTab("categoria")}
-                className={`text-xl font-medium pb-2 transition-colors ${
-                  activeTab === "categoria" 
-                    ? "text-[#E1B058] border-b-2 border-[#E1B058]" 
-                    : "text-[#B3B3B3] hover:text-white"
-                }`}
-              >
-                Por Categoría
-              </button>
-              <button 
                 onClick={() => setActiveTab("palmar")}
                 className={`text-xl font-medium pb-2 transition-colors ${
                   activeTab === "palmar" 
@@ -373,40 +363,6 @@ export default function ResultsPage() {
                     </div>
                   </div>
                 )
-              ))}
-            </div>
-          </section>
-        ) : activeTab === "categoria" ? (
-          <section>
-            <h2 className="text-2xl md:text-3xl font-bold mb-8 text-[#E1B058] text-center">Resultados por Categoría</h2>
-            
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-              {categories.map((category) => (
-                <div key={category.id} className="bg-[#0D0D0D] border border-[#3A3A3A] rounded-lg overflow-hidden">
-                  <div className="relative h-48">
-                    <Image
-                      src={category.image}
-                      alt={category.name}
-                      fill
-                      className="object-cover"
-                    />
-                    <div className="absolute inset-0 bg-gradient-to-t from-[#0A0A0A] to-transparent"></div>
-                    <div className="absolute bottom-0 left-0 p-4">
-                      <h3 className="text-2xl font-bold text-white mb-1">{category.name}</h3>
-                    </div>
-                  </div>
-                  
-                  <div className="p-4">
-                    <div className="mb-3">
-                      <span className="text-[#B3B3B3]">Ganador:</span>
-                      <div className="text-xl font-medium">{category.winner}</div>
-                    </div>
-                    <div>
-                      <span className="text-[#B3B3B3]">Votos:</span>
-                      <div className="text-lg font-medium">{category.votes}</div>
-                    </div>
-                  </div>
-                </div>
               ))}
             </div>
           </section>
