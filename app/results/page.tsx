@@ -284,7 +284,7 @@ export default function ResultsPage() {
       <div className="min-h-screen bg-[#0A0A0A] text-white flex items-center justify-center">
         <div className="max-w-md w-full p-8 bg-[#111111] border border-[#3A3A3A] rounded-lg">
           <div className="text-center mb-6">
-            <h1 className="text-3xl font-bold text-[#E1B058] mb-2">Resultados Neo-Maya</h1>
+            <h1 className="text-3xl font-bold text-[#E1B058] mb-2">PAL'MAR 2025</h1>
             <p className="text-[#B3B3B3]">Acceso restringido</p>
           </div>
           
