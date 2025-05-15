@@ -349,7 +349,7 @@ export default function ResultsPage() {
       <header className="pt-10 pb-6 px-4 md:px-8 text-center">
         <h1 className="text-4xl md:text-6xl font-bold mb-2 text-[#E1B058]">Resultados</h1>
         <p className="text-lg md:text-xl text-[#B3B3B3] mb-8">
-          Registro de Elementos Neo-Maya
+          Pal'Mar 2025
         </p>
         <div className="max-w-3xl mx-auto">
           <div className="h-1 bg-[#E1B058] w-full opacity-60"></div>
