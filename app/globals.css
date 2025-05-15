@@ -1,0 +1,614 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --foreground-rgb: 255, 255, 255;
+  --background-start-rgb: 0, 0, 0;
+  --background-end-rgb: 0, 0, 0;
+}
+
+/* Fondo moderno de elementos */
+.mystical-background {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: -1;
+  overflow: hidden;
+  background: linear-gradient(45deg, #031428 0%, #092147 100%);
+}
+
+/* Líneas y puntos de circuito */
+.circuit-lines {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  opacity: 0.15;
+  pointer-events: none;
+}
+
+.circuit-dot {
+  position: absolute;
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background-color: currentColor;
+}
+
+/* Panel de elemento AIRE */
+.air-panel {
+  position: absolute;
+  width: 45%;
+  height: 45%;
+  top: 5%;
+  left: 5%;
+  background: radial-gradient(circle at center, rgba(0, 140, 255, 0.08) 0%, transparent 70%);
+  border-radius: 16px;
+  overflow: hidden;
+}
+
+.air-glow {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  background: linear-gradient(135deg, rgba(0, 140, 255, 0.1) 0%, transparent 80%);
+  border-radius: 16px;
+}
+
+.air-lines {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+}
+
+.air-line {
+  position: absolute;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(0, 140, 255, 0.3), transparent);
+  animation: float-line 8s infinite ease-in-out;
+}
+
+/* Cloud Icon */
+.cloud-icon {
+  position: absolute;
+  width: 120px;
+  height: 80px;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: #0090ff;
+}
+
+.cloud-base {
+  position: absolute;
+  width: 80px;
+  height: 40px;
+  bottom: 0;
+  left: 20px;
+  background-color: currentColor;
+  border-radius: 40px;
+}
+
+.cloud-top {
+  position: absolute;
+  width: 50px;
+  height: 50px;
+  top: 0;
+  left: 35px;
+  background-color: currentColor;
+  border-radius: 50%;
+}
+
+.cloud-left {
+  position: absolute;
+  width: 40px;
+  height: 40px;
+  top: 15px;
+  left: 10px;
+  background-color: currentColor;
+  border-radius: 50%;
+}
+
+/* Panel de elemento TIERRA */
+.earth-panel {
+  position: absolute;
+  width: 45%;
+  height: 45%;
+  top: 5%;
+  right: 5%;
+  background: radial-gradient(circle at center, rgba(50, 205, 50, 0.08) 0%, transparent 70%);
+  border-radius: 16px;
+  overflow: hidden;
+}
+
+.earth-glow {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  background: linear-gradient(135deg, rgba(50, 205, 50, 0.1) 0%, transparent 80%);
+  border-radius: 16px;
+}
+
+.earth-lines {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+}
+
+.earth-line {
+  position: absolute;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(50, 205, 50, 0.3), transparent);
+  animation: float-line 8s infinite ease-in-out reverse;
+}
+
+/* Leaf Icon */
+.leaf-icon {
+  position: absolute;
+  width: 100px;
+  height: 100px;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: #32cd32;
+}
+
+.leaf-body {
+  position: absolute;
+  width: 70px;
+  height: 90px;
+  top: 5px;
+  left: 15px;
+  background-color: currentColor;
+  clip-path: polygon(0% 50%, 100% 0%, 100% 100%);
+  transform: rotate(-10deg);
+}
+
+.leaf-vein {
+  position: absolute;
+  width: 2px;
+  height: 70px;
+  top: 15px;
+  left: 50px;
+  background-color: rgba(255, 255, 255, 0.6);
+  transform: rotate(-10deg);
+}
+
+/* Panel de elemento AGUA */
+.water-panel {
+  position: absolute;
+  width: 45%;
+  height: 45%;
+  bottom: 5%;
+  left: 5%;
+  background: radial-gradient(circle at center, rgba(0, 150, 255, 0.08) 0%, transparent 70%);
+  border-radius: 16px;
+  overflow: hidden;
+}
+
+.water-glow {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  background: linear-gradient(135deg, rgba(0, 150, 255, 0.1) 0%, transparent 80%);
+  border-radius: 16px;
+}
+
+.water-lines {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+}
+
+.water-line {
+  position: absolute;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(0, 150, 255, 0.3), transparent);
+  animation: float-line 9s infinite ease-in-out;
+}
+
+/* Drop Icon */
+.drop-icon {
+  position: absolute;
+  width: 80px;
+  height: 120px;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: #0096ff;
+}
+
+.drop-body {
+  position: absolute;
+  width: 80px;
+  height: 80px;
+  bottom: 0;
+  left: 0;
+  background-color: currentColor;
+  border-radius: 50% 50% 50% 0;
+  transform: rotate(45deg);
+}
+
+.drop-highlight {
+  position: absolute;
+  width: 20px;
+  height: 20px;
+  top: 20px;
+  left: 20px;
+  background-color: rgba(255, 255, 255, 0.4);
+  border-radius: 50%;
+}
+
+/* Panel de elemento FUEGO */
+.fire-panel {
+  position: absolute;
+  width: 45%;
+  height: 45%;
+  bottom: 5%;
+  right: 5%;
+  background: radial-gradient(circle at center, rgba(255, 120, 0, 0.08) 0%, transparent 70%);
+  border-radius: 16px;
+  overflow: hidden;
+}
+
+.fire-glow {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  background: linear-gradient(135deg, rgba(255, 120, 0, 0.1) 0%, transparent 80%);
+  border-radius: 16px;
+}
+
+.fire-lines {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+}
+
+.fire-line {
+  position: absolute;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(255, 120, 0, 0.3), transparent);
+  animation: float-line 7s infinite ease-in-out reverse;
+}
+
+/* Flame Icon */
+.flame-icon {
+  position: absolute;
+  width: 100px;
+  height: 120px;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: #ff7800;
+}
+
+.flame-body {
+  position: absolute;
+  width: 60px;
+  height: 90px;
+  bottom: 0;
+  left: 20px;
+  background-color: currentColor;
+  border-radius: 30px 30px 5px 30px;
+  transform-origin: center bottom;
+}
+
+.flame-inner {
+  position: absolute;
+  width: 30px;
+  height: 50px;
+  bottom: 15px;
+  left: 35px;
+  background-color: #ffcc00;
+  border-radius: 15px 15px 2px 15px;
+  filter: blur(2px);
+  transform-origin: center bottom;
+  animation: flicker 2s infinite alternate ease-in-out;
+}
+
+/* Animaciones */
+@keyframes flicker {
+  0%, 100% {
+    transform: scaleY(1) rotate(0deg);
+    opacity: 0.9;
+  }
+  50% {
+    transform: scaleY(1.1) rotate(3deg);
+    opacity: 1;
+  }
+}
+
+@keyframes float-line {
+  0%, 100% {
+    transform: translateY(0);
+    opacity: 0.3;
+  }
+  50% {
+    transform: translateY(10px);
+    opacity: 0.7;
+  }
+}
+
+/* Líneas de conexión entre elementos */
+.connector {
+  position: absolute;
+  background: linear-gradient(to right, transparent, rgba(255, 255, 255, 0.2), transparent);
+  height: 1px;
+  width: 50%;
+  top: 50%;
+  left: 25%;
+  transform-origin: center;
+  z-index: 1;
+}
+
+.connector-vertical {
+  position: absolute;
+  background: linear-gradient(to bottom, transparent, rgba(255, 255, 255, 0.2), transparent);
+  width: 1px;
+  height: 50%;
+  top: 25%;
+  left: 50%;
+  transform-origin: center;
+  z-index: 1;
+}
+
+body {
+  color: rgb(var(--foreground-rgb));
+  background: transparent;
+  transition: background 0.5s ease-in-out;
+  overflow-x: hidden;
+}
+
+/* Aseguramos que el contenido principal esté por encima del fondo */
+.content-wrapper {
+  position: relative;
+  z-index: 1;
+}
+
+/* Transición para la revelación del elemento */
+body.transition-to-element {
+  position: relative;
+  overflow: hidden;
+}
+
+body.transition-to-element::after {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: black;
+  z-index: 9999;
+  animation: fadeInOut 1.4s ease-in-out forwards;
+}
+
+@keyframes fadeInOut {
+  0% { opacity: 0; }
+  50% { opacity: 1; }
+  100% { opacity: 0; }
+}
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+}
+
+/* Efectos de neón */
+.neon-text {
+  text-shadow: 0 0 5px rgba(255, 255, 255, 0.8), 0 0 10px rgba(255, 255, 255, 0.5), 0 0 15px rgba(255, 165, 0, 0.5), 0 0
+    20px rgba(255, 165, 0, 0.3);
+}
+
+.neon-text-sm {
+  text-shadow: 0 0 2px rgba(255, 255, 255, 0.8), 0 0 4px rgba(255, 255, 255, 0.5), 0 0 6px rgba(255, 165, 0, 0.5), 0 0
+    8px rgba(255, 165, 0, 0.3);
+}
+
+.glow-effect {
+  box-shadow: 0 0 10px rgba(255, 165, 0, 0.5), 0 0 20px rgba(255, 165, 0, 0.3);
+}
+
+.glow-effect-sm {
+  box-shadow: 0 0 5px rgba(255, 165, 0, 0.5), 0 0 10px rgba(255, 165, 0, 0.3);
+}
+
+/* Patrones mayas */
+.maya-pattern {
+  background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.1'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+}
+
+.maya-glyph-border {
+  position: relative;
+  border-image-slice: 1;
+  border-width: 1px;
+  border-image-source: linear-gradient(to right, rgba(255, 165, 0, 0.3), rgba(255, 165, 0, 0.5), rgba(255, 165, 0, 0.3));
+}
+
+.maya-glyph-text {
+  position: relative;
+  display: inline-block;
+}
+
+.maya-glyph-text::after {
+  content: "";
+  position: absolute;
+  bottom: -5px;
+  left: 0;
+  width: 100%;
+  height: 1px;
+  background: linear-gradient(to right, transparent, rgba(255, 165, 0, 0.5), transparent);
+}
+
+/* Animaciones */
+@keyframes scan {
+  0% {
+    opacity: 0.3;
+    transform: scale(0.95);
+  }
+  50% {
+    opacity: 0.5;
+    transform: scale(1.05);
+  }
+  100% {
+    opacity: 0.3;
+    transform: scale(0.95);
+  }
+}
+
+.animate-scan {
+  animation: scan 2s infinite;
+}
+
+@keyframes float {
+  0% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+  100% {
+    transform: translateY(0px);
+  }
+}
+
+.animate-float {
+  animation: float 6s ease-in-out infinite;
+}
+
+@keyframes pulse-slow {
+  0%,
+  100% {
+    opacity: 0.3;
+  }
+  50% {
+    opacity: 0.7;
+  }
+}
+
+.animate-pulse-slow {
+  animation: pulse-slow 2s ease-in-out infinite;
+}
+
+/* New animations for element discovery */
+@keyframes slow-pulse {
+  0% {
+    opacity: 0.8;
+    filter: saturate(0.9) brightness(0.9);
+  }
+  50% {
+    opacity: 1;
+    filter: saturate(1.1) brightness(1.1);
+  }
+  100% {
+    opacity: 0.8;
+    filter: saturate(0.9) brightness(0.9);
+  }
+}
+
+.animate-slow-pulse {
+  animation: slow-pulse 8s ease-in-out infinite;
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.animate-fade-in {
+  animation: fade-in 1.5s ease-out forwards;
+}
+
+@keyframes scale-in {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.animate-scale-in {
+  animation: scale-in 0.8s ease-out forwards;
+}
+
+@keyframes glow {
+  0%, 100% {
+    text-shadow: 0 0 5px rgba(255, 255, 255, 0.7), 
+                 0 0 10px rgba(255, 255, 255, 0.5), 
+                 0 0 15px currentColor, 
+                 0 0 20px currentColor;
+  }
+  50% {
+    text-shadow: 0 0 7px rgba(255, 255, 255, 0.8), 
+                 0 0 12px rgba(255, 255, 255, 0.6), 
+                 0 0 20px currentColor, 
+                 0 0 25px currentColor;
+  }
+}
+
+.animate-glow {
+  animation: glow 2s ease-in-out infinite alternate;
+}
+
+/* Animación de brillo para el título de elementos */
+@keyframes shimmer {
+  0% {
+    background-position: -200% center;
+  }
+  100% {
+    background-position: 200% center;
+  }
+}
+
+.animate-shimmer {
+  animation: shimmer 5s ease-in-out infinite;
+  background-size: 200% auto;
+}
+
+/* Estilos para prevenir Flash of Unstyled Content (FOUC) */
+html {
+  visibility: visible;
+  opacity: 1;
+}
+
+html:not(.js-loaded) {
+  visibility: hidden;
+  opacity: 0;
+}
+
+html.js-loaded {
+  visibility: visible;
+  opacity: 1;
+  transition: opacity 0.15s ease-in;
+}
+
+/* Fin de los estilos para prevenir FOUC */
