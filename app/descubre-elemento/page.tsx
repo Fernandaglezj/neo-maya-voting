@@ -23,12 +23,12 @@ const ELEMENTOS = [
   {
     id: "fuego",
     nombre: "Fuego",
-    descripcion: "Excelencia Técnica",
+    descripcion: "K'AAK'",
     color: "orange",
     bgColor: "bg-orange-500",
     bgImage: "/images/bg-fire.jpg",
     detalle:
-      "El elemento Fuego representa la pasión, la creatividad y la excelencia técnica. Aquellos que son reconocidos con este elemento demuestran habilidades excepcionales en su campo y una dedicación ardiente a la perfección.",
+      "Elemento del impulso, la pasión y el liderazgo.\nEres chispa que enciende, llama que guía como el sol que nace entre los templos, inspiras con tu energía, tu determinación y tu calor. Llevas dentro la fuerza del jaguar que no teme avanzar, y el corazón valiente que enciende a otros.\nDonde tú vas, se siente el movimiento, la pasión por hacer y transformar. \n\n**Tu misión**: Encender caminos, contagiar entusiasmo y ser motor de cambio. \n**Tu valor sagrado**: La iniciativa.",
     icon: (
       <svg
         xmlns="http://www.w3.org/2000/svg"
@@ -47,12 +47,12 @@ const ELEMENTOS = [
   {
     id: "agua",
     nombre: "Agua",
-    descripcion: "Innovación",
+    descripcion: "HA'",
     color: "blue",
     bgColor: "bg-blue-500",
     bgImage: "/images/bg-water.jpg",
     detalle:
-      "El elemento Agua simboliza la adaptabilidad, la intuición y la innovación. Las personas reconocidas con este elemento fluyen con los cambios y encuentran soluciones creativas a los desafíos más complejos.",
+      "Elemento de la sensibilidad, la empatía y la armonía.\nEres río que fluye, lluvia que nutre, espejo de emociones profundas. Como los cenotes sagrados, tienes una calma que conecta, una sabiduría suave que transforma sin imponer.\nEscuchas con el alma, cuidas con presencia, y construyes puentes entre personas y mundos.\n\n**Tu misión**: Sanar, unir y recordar lo esencial.\n**Tu valor sagrado**: La compasión.",
     icon: (
       <svg
         xmlns="http://www.w3.org/2000/svg"
@@ -71,12 +71,12 @@ const ELEMENTOS = [
   {
     id: "aire",
     nombre: "Aire",
-    descripcion: "Liderazgo",
+    descripcion: "IIK'",
     color: "sky",
     bgColor: "bg-sky-400",
     bgImage: "/images/bg-air.jpg",
     detalle:
-      "El elemento Aire simboliza el liderazgo, la visión y la comunicación. Las personas reconocidas con este elemento inspiran a otros con su claridad de pensamiento y capacidad para elevar a todo el equipo.",
+      "Elemento del pensamiento, la creatividad y la comunicación.\nEres brisa que renueva, voz que viaja lejos. Como el viento entre las copas de los árboles, traes ideas frescas, soluciones inesperadas y una mente que no se detiene. Observas desde lo alto, ves conexiones invisibles y hablas con claridad.\nEres libertad en forma de palabra y pensamiento.\n\n**Tu misión**: Abrir horizontes, inspirar y conectar con nuevas posibilidades.\n**Tu valor sagrado**: La visión.",
     icon: (
       <svg
         xmlns="http://www.w3.org/2000/svg"
@@ -95,12 +95,12 @@ const ELEMENTOS = [
   {
     id: "tierra",
     nombre: "Tierra",
-    descripcion: "Trabajo en Equipo",
+    descripcion: "LU'UM",
     color: "emerald",
     bgColor: "bg-emerald-600",
     bgImage: "/images/bg-earth.jpg",
     detalle:
-      "El elemento Tierra representa la estabilidad, la confiabilidad y el trabajo en equipo. Quienes son honrados con este elemento demuestran una capacidad excepcional para construir bases sólidas y fomentar la colaboración.",
+      "Elemento de la estabilidad, la constancia y la construcción.\nEres raíz profunda, camino firme, roca que sostiene, como la milpa sagrada sabes que el crecimiento lleva tiempo y cuidado, te mueves con propósito, edificas con paciencia y ofreces seguridad en medio del caos.\nTu presencia da calma, y tu fuerza dirección.\n\n**Tu misión**: Sostener, construir y hacer florecer a quienes te rodean.\n**Tu valor sagrado**: La responsabilidad.",
     icon: (
       <svg
         xmlns="http://www.w3.org/2000/svg"
@@ -1162,8 +1162,28 @@ export default function DescubreElementoPage() {
               </div>
 
               <div className="bg-white/5 backdrop-blur-sm border border-white/10 rounded-lg p-6 mb-8">
-                <div className="text-white/80 leading-relaxed">
-                  <p className="mb-4">{ELEMENTOS.find(e => e.id === result)?.detalle}</p>
+                <div className="text-white/80 leading-relaxed text-center">
+                  {ELEMENTOS.find(e => e.id === result)?.detalle.includes('\n') ? (
+                    <>
+                      {ELEMENTOS.find(e => e.id === result)?.detalle.split('\n').map((line, index) => (
+                        <p key={index} className="mb-2">
+                          {line.startsWith('**') && line.endsWith('**') ? (
+                            <strong>{line.replace(/\*\*/g, '')}</strong>
+                          ) : line.includes('**') ? (
+                            <>
+                              {line.split('**').map((part, i) => (
+                                i % 2 === 0 ? part : <strong key={i}>{part}</strong>
+                              ))}
+                            </>
+                          ) : (
+                            line
+                          )}
+                        </p>
+                      ))}
+                    </>
+                  ) : (
+                    <p className="mb-4">{ELEMENTOS.find(e => e.id === result)?.detalle}</p>
+                  )}
                   <p className="italic text-white/60">
                     Este elemento refleja tus fortalezas naturales y la energía que aportas al equipo.
                   </p>

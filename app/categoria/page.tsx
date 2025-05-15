@@ -45,7 +45,7 @@ const ELEMENTOS = [
   {
     id: "fuego",
     nombre: "Fuego",
-    descripcion: "Excelencia Técnica",
+    descripcion: "K'AAK'",
     color: "orange",
     bgColor: "bg-orange-500",
     icon: (
