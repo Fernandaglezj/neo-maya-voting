@@ -4,7 +4,7 @@ import Image from "next/image"
 import Link from "next/link"
 import { useState, useEffect } from "react"
 import { getElementosUsuarios, getInvitadosPalMar } from "@/lib/supabase"
-import { Download } from "lucide-react"
+import { Download, Lock, Eye, EyeOff } from "lucide-react"
 
 type ElementType = "agua" | "fuego" | "tierra" | "aire";
 
@@ -43,6 +43,38 @@ export default function ResultsPage() {
   const [elementosUsuarios, setElementosUsuarios] = useState<PersonElement[]>([])
   const [invitadosPalMar, setInvitadosPalMar] = useState<any[]>([])
   const [statusFilter, setStatusFilter] = useState<"todos" | "pendiente" | "completado">("todos")
+  
+  // Estados para la autenticación
+  const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false)
+  const [password, setPassword] = useState<string>("")
+  const [passwordError, setPasswordError] = useState<string>("")
+  const [showPassword, setShowPassword] = useState<boolean>(false)
+  
+  // Contraseña que dará acceso a los resultados (puedes cambiarla por la que prefieras)
+  const CORRECT_PASSWORD = "PLMR@2025"
+
+  // Verificar si ya tenemos una sesión guardada
+  useEffect(() => {
+    // Intentar recuperar el estado de autenticación del sessionStorage
+    const savedAuth = sessionStorage.getItem("neomaya_results_auth")
+    if (savedAuth === "true") {
+      setIsAuthenticated(true)
+    }
+  }, [])
+
+  // Manejar el envío del formulario de contraseña
+  const handlePasswordSubmit = (e: React.FormEvent) => {
+    e.preventDefault()
+    
+    if (password === CORRECT_PASSWORD) {
+      setIsAuthenticated(true)
+      setPasswordError("")
+      // Guardar el estado de autenticación en sessionStorage para que persista durante la sesión
+      sessionStorage.setItem("neomaya_results_auth", "true")
+    } else {
+      setPasswordError("Contraseña incorrecta. Intenta nuevamente.")
+    }
+  }
 
   // Función para exportar a CSV
   const exportToCSV = () => {
@@ -244,6 +276,72 @@ export default function ResultsPage() {
     "fuego": "Fuego",
     "tierra": "Tierra",
     "aire": "Aire"
+  }
+
+  // Si no está autenticado, mostrar pantalla de login
+  if (!isAuthenticated) {
+    return (
+      <div className="min-h-screen bg-[#0A0A0A] text-white flex items-center justify-center">
+        <div className="max-w-md w-full p-8 bg-[#111111] border border-[#3A3A3A] rounded-lg">
+          <div className="text-center mb-6">
+            <h1 className="text-3xl font-bold text-[#E1B058] mb-2">Resultados Neo-Maya</h1>
+            <p className="text-[#B3B3B3]">Acceso restringido</p>
+          </div>
+          
+          <div className="mb-8">
+            <div className="h-1 bg-[#E1B058] w-full opacity-60"></div>
+            <div className="h-0.5 bg-[#E1B058] w-full mt-1 opacity-30"></div>
+          </div>
+          
+          <div className="flex justify-center mb-6">
+            <div className="w-16 h-16 rounded-full bg-[#222222] flex items-center justify-center">
+              <Lock className="w-8 h-8 text-[#E1B058]" />
+            </div>
+          </div>
+          
+          <form onSubmit={handlePasswordSubmit}>
+            <div className="mb-6">
+              <label htmlFor="password" className="block text-sm font-medium text-[#B3B3B3] mb-2">
+                Ingresa la contraseña para ver los resultados
+              </label>
+              <div className="relative">
+                <input
+                  type={showPassword ? "text" : "password"}
+                  id="password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  className="w-full px-4 py-3 bg-[#0D0D0D] border border-[#3A3A3A] rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-[#E1B058] focus:border-transparent"
+                  placeholder="Contraseña"
+                />
+                <button
+                  type="button"
+                  className="absolute right-3 top-1/2 transform -translate-y-1/2 text-[#B3B3B3] hover:text-white"
+                  onClick={() => setShowPassword(!showPassword)}
+                >
+                  {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
+                </button>
+              </div>
+              {passwordError && (
+                <p className="mt-2 text-red-500 text-sm">{passwordError}</p>
+              )}
+            </div>
+            
+            <button
+              type="submit"
+              className="w-full py-3 bg-gradient-to-r from-[#E1B058] to-[#CF8A30] text-black font-medium rounded-lg hover:from-[#F0C078] hover:to-[#E1B058] transition-all duration-300"
+            >
+              Acceder
+            </button>
+          </form>
+          
+          <div className="mt-6 text-center">
+            <Link href="/" className="text-[#B3B3B3] hover:text-white text-sm transition-colors">
+              Volver al inicio
+            </Link>
+          </div>
+        </div>
+      </div>
+    )
   }
 
   return (
