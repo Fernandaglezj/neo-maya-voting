@@ -397,7 +397,6 @@ export default function DescubreElementoPage() {
   const [currentQuestion, setCurrentQuestion] = useState(0)
   const [answers, setAnswers] = useState<string[]>([])
   const [letterCounts, setLetterCounts] = useState<{A: number, B: number, C: number, D: number}>({A: 0, B: 0, C: 0, D: 0})
-  const [tiedLetters, setTiedLetters] = useState<string[]>([])
   const [result, setResult] = useState<string | null>(null)
   const [hoveredOption, setHoveredOption] = useState<number | null>(null)
   const [animating, setAnimating] = useState(false)
@@ -428,34 +427,6 @@ export default function DescubreElementoPage() {
     'tierra': "Eres estructura, lealtad y constancia. Sostienes y haces florecer con tu compromiso silencioso."
   }
 
-  // Pregunta de desempate
-  const tiebreakerQuestion = {
-    question: "¿Cómo reaccionas cuando las cosas no salen como esperabas?",
-    type: "text",
-    options: [
-      {
-        text: "Busco rápidamente otra forma de lograrlo, no me rindo.",
-        letter: "A",
-        element: "fuego"
-      },
-      {
-        text: "Me adapto a lo que viene y busco fluir con la situación.",
-        letter: "B",
-        element: "agua"
-      },
-      {
-        text: "Me mantengo firme, prefiero ser paciente y encontrar estabilidad.",
-        letter: "C",
-        element: "tierra"
-      },
-      {
-        text: "Le doy la vuelta creativamente, cambiando la perspectiva.",
-        letter: "D",
-        element: "aire"
-      }
-    ]
-  }
-
   // Función para reiniciar el quiz
   const resetQuiz = () => {
     setAnimating(true)
@@ -464,7 +435,6 @@ export default function DescubreElementoPage() {
       setCurrentQuestion(0)
       setAnswers([])
       setLetterCounts({A: 0, B: 0, C: 0, D: 0})
-      setTiedLetters([])
       setResult(null)
       setAnimating(false)
     }, 500)
@@ -480,7 +450,6 @@ export default function DescubreElementoPage() {
       setCurrentQuestion(0)
       setAnswers([])
       setLetterCounts({A: 0, B: 0, C: 0, D: 0})
-      setTiedLetters([])
       setResult(null)
       setQuizCompleted(false)
       setUserInfo({ name: "", email: "" })
@@ -501,7 +470,6 @@ export default function DescubreElementoPage() {
     setUserInfo({ name: "", email: "" });
     setAnswers([]);
     setLetterCounts({ A: 0, B: 0, C: 0, D: 0 });
-    setTiedLetters([]);
     setResult(null);
     setQuizCompleted(false);
     setView("form");
@@ -832,33 +800,22 @@ export default function DescubreElementoPage() {
     // Ordenar por conteo de mayor a menor
     countsArray.sort((a, b) => b.count - a.count)
     
-    // Verificar si hay empate entre los dos primeros
-    if (countsArray[0].count === countsArray[1].count) {
-      // Guardar las letras empatadas
-      const tiedLetters = countsArray
-        .filter(item => item.count === countsArray[0].count)
-        .map(item => item.letter)
-      
-      setTiedLetters(tiedLetters)
-      setView("tiebreaker")
-    } else {
-      // No hay empate, mostrar resultado
-      const result = letterToElement[countsArray[0].letter]
-      setResult(result)
-      
-      // Guardar en Supabase
-      guardarResultadoElemento({
-        nombre: userInfo.name,
-        correo_electronico: userInfo.email,
-        elemento: result,
-        respuestas: {
-          letterCounts: counts,
-          completedAt: new Date().toISOString()
-        }
-      })
-      
-      setView("result")
-    }
+    // Mostrar resultado directamente, sin lógica de empate
+    const result = letterToElement[countsArray[0].letter]
+    setResult(result)
+    
+    // Guardar en Supabase
+    guardarResultadoElemento({
+      nombre: userInfo.name,
+      correo_electronico: userInfo.email,
+      elemento: result,
+      respuestas: {
+        letterCounts: counts,
+        completedAt: new Date().toISOString()
+      }
+    })
+    
+    setView("result")
   }
 
   // Función para obtener el color de borde según el elemento
@@ -969,24 +926,24 @@ export default function DescubreElementoPage() {
 
         {/* Formulario de registro de usuario */}
         {view === "form" && (
-          <div className="max-w-md mx-auto">
+          <div className="max-w-sm mx-auto">
             <div
-              className={`bg-black/30 backdrop-blur-sm border-2 border-white/20 rounded-2xl p-8 mb-8 transition-all duration-500 
+              className={`bg-black/30 backdrop-blur-sm border-2 border-white/20 rounded-2xl p-4 mb-8 transition-all duration-500 
               ${animating ? "opacity-0 transform translate-y-10" : "opacity-100 transform translate-y-0"}`}
             >
-              <h2 className="text-3xl font-bold text-white mb-6 text-center">Registro para la Ceremonia</h2>
-              <p className="text-white/80 mb-8 text-center text-lg">
+              <h2 className="text-2xl font-bold text-white mb-4 text-center">Registro para la Ceremonia</h2>
+              <p className="text-white/80 mb-6 text-center text-base">
                 Antes de descubrir tu elemento, necesitamos conocer quién eres.
               </p>
 
               <form onSubmit={handleFormSubmit}>
-                <div className="mb-6">
-                  <label htmlFor="name" className="block text-white/90 mb-2 font-medium text-lg">
+                <div className="mb-4">
+                  <label htmlFor="name" className="block text-white/90 mb-1 font-medium text-base">
                     Nombre completo
                   </label>
                   <div className="relative">
-                    <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-                      <User className="h-6 w-6 text-white/50" />
+                    <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                      <User className="h-5 w-5 text-white/50" />
                     </div>
                     <input
                       type="text"
@@ -994,27 +951,27 @@ export default function DescubreElementoPage() {
                       name="name"
                       value={userInfo.name}
                       onChange={handleInputChange}
-                      className={`w-full pl-12 pr-4 py-4 bg-white/10 border-2 ${
+                      className={`w-full pl-10 pr-3 py-3 bg-white/10 border-2 ${
                         formErrors.name ? "border-red-500/70" : "border-white/20"
-                      } rounded-xl text-white text-lg placeholder-white/40 focus:outline-none focus:ring-2 focus:ring-amber-500/50 focus:border-transparent shadow-inner`}
+                      } rounded-xl text-white text-base placeholder-white/40 focus:outline-none focus:ring-2 focus:ring-amber-500/50 focus:border-transparent shadow-inner`}
                       placeholder="Tu nombre completo"
                     />
                   </div>
                   {formErrors.name && (
-                    <p className="mt-2 text-red-400 text-base flex items-center">
-                      <AlertCircle className="h-5 w-5 mr-2" />
+                    <p className="mt-1 text-red-400 text-sm flex items-center">
+                      <AlertCircle className="h-4 w-4 mr-2" />
                       {formErrors.name}
                     </p>
                   )}
                 </div>
 
-                <div className="mb-8">
-                  <label htmlFor="email" className="block text-white/90 mb-2 font-medium text-lg">
+                <div className="mb-6">
+                  <label htmlFor="email" className="block text-white/90 mb-1 font-medium text-base">
                     Correo electrónico
                   </label>
                   <div className="relative">
-                    <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-                      <Mail className="h-6 w-6 text-white/50" />
+                    <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                      <Mail className="h-5 w-5 text-white/50" />
                     </div>
                     <input
                       type="email"
@@ -1022,19 +979,19 @@ export default function DescubreElementoPage() {
                       name="email"
                       value={userInfo.email}
                       onChange={handleInputChange}
-                      className={`w-full pl-12 pr-4 py-4 bg-white/10 border-2 ${
+                      className={`w-full pl-10 pr-3 py-3 bg-white/10 border-2 ${
                         formErrors.email ? "border-red-500/70" : "border-white/20"
-                      } rounded-xl text-white text-lg placeholder-white/40 focus:outline-none focus:ring-2 focus:ring-amber-500/50 focus:border-transparent shadow-inner`}
+                      } rounded-xl text-white text-base placeholder-white/40 focus:outline-none focus:ring-2 focus:ring-amber-500/50 focus:border-transparent shadow-inner`}
                       placeholder="tucorreo@arkusnexus.com"
                     />
                   </div>
                   {formErrors.email && (
-                    <div className="mt-2 text-red-400 flex items-start">
-                      <AlertCircle className="h-5 w-5 mr-2 shrink-0 mt-0.5" />
+                    <div className="mt-1 text-red-400 flex items-start">
+                      <AlertCircle className="h-4 w-4 mr-2 shrink-0 mt-0.5" />
                       <div>
-                        <p className="font-medium text-base">{formErrors.email}</p>
+                        <p className="font-medium text-sm">{formErrors.email}</p>
                         {formErrors.email.includes("ya ha completado") && (
-                          <p className="text-sm mt-1"></p>
+                          <p className="text-xs mt-1"></p>
                         )}
                       </div>
                     </div>
@@ -1045,7 +1002,7 @@ export default function DescubreElementoPage() {
                   <button
                     type="submit"
                     disabled={!isFormValid}
-                    className={`px-10 py-4 rounded-full font-medium text-lg shadow-lg transition-all duration-300
+                    className={`px-6 py-3 rounded-full font-medium text-base shadow-lg transition-all duration-300
                       ${
                         isFormValid
                           ? "bg-gradient-to-r from-amber-500 to-orange-600 text-white hover:shadow-xl hover:from-amber-600 hover:to-orange-700 transform hover:scale-[1.02]"
@@ -1058,9 +1015,9 @@ export default function DescubreElementoPage() {
               </form>
             </div>
 
-            <div className="bg-white/5 backdrop-blur-sm border-2 border-white/10 rounded-xl p-5 flex items-start">
-              <Info className="w-6 h-6 text-white/60 mr-3 shrink-0 mt-1" />
-              <p className="text-white/70 text-base">
+            <div className="bg-white/5 backdrop-blur-sm border-2 border-white/10 rounded-xl p-3 flex items-start">
+              <Info className="w-5 h-5 text-white/60 mr-2 shrink-0 mt-0.5" />
+              <p className="text-white/70 text-sm">
                 Esta ceremonia es exclusiva para miembros de ArkusNexus. Por favor, utiliza tu correo corporativo con
                 dominio @arkusnexus.com para continuar.
               </p>
@@ -1125,6 +1082,7 @@ export default function DescubreElementoPage() {
                             width="100%"
                             style={{ borderRadius: '1rem', maxHeight: '100%' }}
                             onClick={e => e.stopPropagation()}
+                            onPointerDown={e => e.stopPropagation()}
                           >
                             <source src={option.video} type="video/mp4" />
                             Tu navegador no soporta el video.
@@ -1267,48 +1225,6 @@ export default function DescubreElementoPage() {
                   </div>
                 )
               )}
-            </div>
-          </div>
-        )}
-
-        {/* Pregunta de desempate */}
-        {view === "tiebreaker" && (
-          <div className="max-w-4xl mx-auto">
-            <div
-              className={`bg-black/30 backdrop-blur-sm border border-white/20 rounded-2xl p-8 mb-8 transition-all duration-500 
-              ${animating ? "opacity-0 transform translate-x-10" : "opacity-100 transform translate-x-0"}`}
-            >
-              <h2 className="text-3xl md:text-4xl font-bold text-white mb-8 text-center">
-                {tiebreakerQuestion.question}
-              </h2>
-
-              <div className="space-y-6">
-                {tiebreakerQuestion.options.map((option, index) => (
-                  <button
-                    key={index}
-                    onClick={() => handleTiebreakerAnswer(option.letter, option.element)}
-                    onMouseEnter={() => setHoveredOption(index)}
-                    onMouseLeave={() => setHoveredOption(null)}
-                    className={`w-full text-left p-5 rounded-xl 
-                              ${
-                                hoveredOption === index
-                                  ? `bg-gradient-to-r ${getElementBgGradient(option.element)}`
-                                  : "bg-white/5"
-                              }
-                              hover:bg-white/10 
-                              border-2 ${
-                                hoveredOption === index ? getElementBorderColor(option.element) : "border-white/10"
-                              } 
-                              hover:border-white/30 transition-all duration-300
-                              text-white hover:text-white flex items-start`}
-                  >
-                    <span className="inline-block w-10 h-10 rounded-full bg-white/20 flex items-center justify-center mr-4 shrink-0 text-lg font-bold shadow-inner">
-                      {option.letter}
-                    </span>
-                    {/* No mostrar el texto de la opción */}
-                  </button>
-                ))}
-              </div>
             </div>
           </div>
         )}
