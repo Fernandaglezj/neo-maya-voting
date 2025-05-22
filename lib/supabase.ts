@@ -229,6 +229,32 @@ export async function cerrarSesion(sesionId: string) {
   }
 }
 
+// Función para calcular porcentajes de elementos
+function calculateElementPercentages(letterCounts: { A: number; B: number; C: number; D: number }): Record<string, number> {
+  // Mapeo de letras a elementos
+  const letterToElement: Record<string, string> = {
+    'A': 'fuego',
+    'B': 'agua',
+    'C': 'tierra',
+    'D': 'aire'
+  };
+  
+  // Calcular el total de puntos (considerando puntajes dobles y triples)
+  const total = Object.values(letterCounts).reduce((sum, count) => sum + count, 0);
+  
+  // Calcular porcentajes para todos los elementos
+  const percentages: Record<string, number> = {};
+  Object.entries(letterCounts).forEach(([letter, count]) => {
+    const element = letterToElement[letter];
+    if (element) {
+      // Calcular el porcentaje basado en el total de puntos
+      percentages[element] = Math.round((count / total) * 100);
+    }
+  });
+  
+  return percentages;
+}
+
 // Función para guardar el resultado del test de elementos
 export async function guardarResultadoElemento({
   nombre,
@@ -243,6 +269,9 @@ export async function guardarResultadoElemento({
 }) {
   try {
     console.log("Guardando resultado de elemento en Supabase:", { nombre, correo_electronico, elemento });
+    
+    // Calcular porcentajes de elementos
+    const percentages = respuestas?.letterCounts ? calculateElementPercentages(respuestas.letterCounts) : {};
     
     // Primero verificamos si ya existe un registro con ese correo
     const { data: existingUser, error: searchError } = await supabase
@@ -267,6 +296,10 @@ export async function guardarResultadoElemento({
           nombre,
           elemento,
           respuestas,
+          porcentaje_agua: percentages['agua'] || 0,
+          porcentaje_fuego: percentages['fuego'] || 0,
+          porcentaje_tierra: percentages['tierra'] || 0,
+          porcentaje_aire: percentages['aire'] || 0,
           fecha_creacion: new Date()
         })
         .eq('id', existingUser.id)
@@ -292,6 +325,10 @@ export async function guardarResultadoElemento({
           correo_electronico,
           elemento,
           respuestas,
+          porcentaje_agua: percentages['agua'] || 0,
+          porcentaje_fuego: percentages['fuego'] || 0,
+          porcentaje_tierra: percentages['tierra'] || 0,
+          porcentaje_aire: percentages['aire'] || 0,
           fecha_creacion: new Date()
         }])
         .select();
@@ -367,18 +404,17 @@ export async function getElementosUsuarios() {
 export async function verificarInvitadoPalMar(correo_electronico: string) {
   try {
     if (!correo_electronico) return null;
-    
+    const correo = correo_electronico.trim().toLowerCase();
+    console.log("Buscando invitado con correo:", correo, typeof correo);
     const { data, error } = await supabase
       .from('personas_invitadas')
       .select('*')
-      .eq('email', correo_electronico.toLowerCase())
+      .eq('correo_electronico', correo)
       .maybeSingle();
-    
     if (error) {
       console.error("Error al verificar invitado PalMar:", error);
       return null;
     }
-    
     return data;
   } catch (error) {
     console.error("Error al verificar invitado PalMar:", error);
@@ -387,59 +423,63 @@ export async function verificarInvitadoPalMar(correo_electronico: string) {
 }
 
 // Función para actualizar el estado de un invitado cuando completa el quiz
-export async function actualizarInvitadoPalMar(correo_electronico: string, elemento: string) {
+export async function actualizarInvitadoPalMar(
+  correo_electronico: string,
+  elemento: string,
+  percentages: { agua: number, fuego: number, tierra: number, aire: number },
+  respuestas?: any
+) {
   try {
     if (!correo_electronico) {
       console.error("Error: correo_electronico es requerido para actualizar invitado PalMar");
       return null;
     }
-    
-    console.log(`Actualizando invitado PalMar: email=${correo_electronico.toLowerCase()}, elemento=${elemento}`);
-    
+    const correo = correo_electronico.trim().toLowerCase();
+    console.log(`[PalMar] Buscando invitado para actualizar: '${correo}'`);
     // Primero verificar si el invitado existe
     const { data: invitado, error: checkError } = await supabase
       .from('personas_invitadas')
-      .select('id, email, estado')
-      .eq('email', correo_electronico.toLowerCase())
+      .select('id, correo_electronico, estado')
+      .eq('correo_electronico', correo)
       .maybeSingle();
-    
+    console.log(`[PalMar] Resultado de búsqueda de invitado:`, invitado, checkError);
     if (checkError) {
-      console.error("Error al verificar invitado PalMar antes de actualizar:", checkError);
+      console.error("[PalMar] Error al verificar invitado PalMar antes de actualizar:", checkError);
       return null;
     }
-    
     if (!invitado) {
-      console.error(`Invitado con email ${correo_electronico.toLowerCase()} no encontrado en personas_invitadas`);
+      console.error(`[PalMar] Invitado con correo '${correo}' no encontrado en personas_invitadas`);
       return null;
     }
-    
-    console.log(`Invitado encontrado con ID ${invitado.id}, estado actual: ${invitado.estado}`);
-    
+    console.log(`[PalMar] Invitado encontrado con ID ${invitado.id}, estado actual: ${invitado.estado}`);
     // Ahora actualizamos el registro
     const { data, error } = await supabase
       .from('personas_invitadas')
       .update({ 
         estado: 'completado',
         elemento: elemento,
-        fecha_completado: new Date()
+        porcentaje_agua: percentages.agua,
+        porcentaje_fuego: percentages.fuego,
+        porcentaje_tierra: percentages.tierra,
+        porcentaje_aire: percentages.aire,
+        fecha_completado: new Date(),
+        respuestas: respuestas || null
       })
       .eq('id', invitado.id)
       .select();
-    
+    console.log(`[PalMar] Resultado del update:`, data, error);
     if (error) {
-      console.error("Error al actualizar invitado PalMar:", error);
+      console.error("[PalMar] Error al actualizar invitado PalMar:", error);
       return null;
     }
-    
     if (!data || data.length === 0) {
-      console.error("No se actualizó ningún registro de invitado PalMar");
+      console.error("[PalMar] No se actualizó ningún registro de invitado PalMar");
       return null;
     }
-    
-    console.log("Invitado PalMar actualizado correctamente:", data);
+    console.log("[PalMar] Invitado PalMar actualizado correctamente:", data);
     return data;
   } catch (error) {
-    console.error("Error al actualizar invitado PalMar:", error);
+    console.error("[PalMar] Error al actualizar invitado PalMar:", error);
     return null;
   }
 }

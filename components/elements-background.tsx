@@ -8,7 +8,7 @@ export default function ElementsBackground() {
   useEffect(() => {
     // Precargar la imagen de fondo para asegurar que esté disponible
     const img = new Image()
-    img.src = "/images/elementos-fondo2.jpg"
+    img.src = "/images/fondo.png"
     img.onload = () => {
       setLoaded(true)
     }
@@ -24,7 +24,7 @@ export default function ElementsBackground() {
   return (
     <div className={`mystical-background ${loaded ? 'opacity-100' : 'opacity-0'}`} 
       style={{
-        backgroundImage: 'url("/images/elementos-fondo2.jpg")',
+        backgroundImage: 'url("/images/fondo.png")',
         backgroundSize: 'cover',
         backgroundPosition: 'center',
         backgroundRepeat: 'no-repeat',

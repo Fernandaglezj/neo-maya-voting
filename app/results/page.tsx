@@ -23,7 +23,16 @@ interface ElementoUsuario {
   correo_electronico: string;
   elemento: string;
   fecha_creacion?: string;
-  respuestas?: any;
+  respuestas?: {
+    letterCounts: {
+      A: number;
+      B: number;
+      C: number;
+      D: number;
+    };
+    tiebreaker?: string;
+    completedAt: string;
+  };
 }
 
 // Tipo para la versión mostrada de elementos de usuario
@@ -35,6 +44,16 @@ type PersonElement = {
   description: string;
   elementColor: string;
   createdAt?: string;
+  respuestas?: {
+    letterCounts: {
+      A: number;
+      B: number;
+      C: number;
+      D: number;
+    };
+    tiebreaker?: string;
+    completedAt: string;
+  };
 }
 
 export default function ResultsPage() {
@@ -101,29 +120,46 @@ export default function ResultsPage() {
     });
     
     // Cabeceras CSV
-    const headers = ["Nombre", "Correo", "Estado", "Elemento", "Fecha"];
+    const headers = [
+      "Nombre", 
+      "Correo", 
+      "Estado", 
+      "Elemento Principal",
+      "Porcentaje Agua",
+      "Porcentaje Fuego",
+      "Porcentaje Tierra",
+      "Porcentaje Aire",
+      "Fecha"
+    ];
     
     // Convertir datos a filas CSV
     const csvRows = [
       // Encabezados
       headers.join(','),
       // Datos de invitados ordenados
-      ...sortedInvitees.map(invitado => [
-        // Escapar comas y comillas en campos de texto
-        `"${invitado.nombre?.replace(/"/g, '""') || ''}"`,
-        `"${invitado.email?.replace(/"/g, '""') || ''}"`,
-        "Completado",
-        invitado.elemento 
-          ? elementDisplayNames[invitado.elemento as ElementType] || invitado.elemento 
-          : "N/A",
-        invitado.fecha_completado 
-          ? new Date(invitado.fecha_completado).toLocaleDateString('es-MX', {
-              day: 'numeric', 
-              month: 'short', 
-              year: 'numeric'
-            })
-          : "N/A"
-      ].join(','))
+      ...sortedInvitees.map(invitado => {
+        const percentages = calculateElementPercentages(invitado.respuestas);
+        return [
+          // Escapar comas y comillas en campos de texto
+          `"${invitado.nombre?.replace(/"/g, '""') || ''}"`,
+          `"${invitado.email?.replace(/"/g, '""') || ''}"`,
+          "Completado",
+          invitado.elemento 
+            ? elementDisplayNames[invitado.elemento as ElementType] || invitado.elemento 
+            : "N/A",
+          percentages['agua'] || 0,
+          percentages['fuego'] || 0,
+          percentages['tierra'] || 0,
+          percentages['aire'] || 0,
+          invitado.fecha_completado 
+            ? new Date(invitado.fecha_completado).toLocaleDateString('es-MX', {
+                day: 'numeric', 
+                month: 'short', 
+                year: 'numeric'
+              })
+            : "N/A"
+        ].join(',');
+      })
     ].join('\n');
     
     // Crear el contenido del CSV
@@ -159,6 +195,7 @@ export default function ResultsPage() {
           description: getElementDescription(item.elemento),
           elementColor: getElementColor(item.elemento),
           createdAt: item.fecha_creacion,
+          respuestas: item.respuestas
         }));
         
         setElementosUsuarios(personElements);
@@ -276,6 +313,55 @@ export default function ResultsPage() {
     "fuego": "Fuego",
     "tierra": "Tierra",
     "aire": "Aire"
+  }
+
+  // Función para calcular porcentajes de elementos
+  function calculateElementPercentages(respuestas: any): Record<string, number> {
+    if (!respuestas?.letterCounts) return {};
+
+    const letterToElement: Record<string, string> = {
+      'A': 'fuego',
+      'B': 'agua',
+      'C': 'aire',
+      'D': 'tierra'
+    };
+
+    const letterCounts = respuestas.letterCounts as { A: number; B: number; C: number; D: number };
+    const totalPoints = Object.values(letterCounts).reduce((sum, count) => sum + count, 0);
+
+    // 1. Calcular porcentajes reales y residuos
+    const realPercentages: Record<string, number> = {};
+    const roundedPercentages: Record<string, number> = {};
+    const residues: { element: string, residue: number }[] = [];
+    let sum = 0;
+    Object.entries(letterCounts).forEach(([letter, count]) => {
+      const element = letterToElement[letter];
+      if (element) {
+        const real = (count / totalPoints) * 100;
+        realPercentages[element] = real;
+        const rounded = Math.round(real);
+        roundedPercentages[element] = rounded;
+        residues.push({ element, residue: real - rounded });
+        sum += rounded;
+      }
+    });
+    // LOGS TEMPORALES PARA DEPURAR
+    console.log('letterCounts:', letterCounts);
+    console.log('totalPoints:', totalPoints);
+    console.log('realPercentages:', realPercentages);
+    console.log('roundedPercentages:', roundedPercentages);
+    console.log('residues:', residues);
+    console.log('sum:', sum);
+    // 2. Ajustar para que sumen 100%
+    if (sum !== 100 && residues.length > 0) {
+      residues.sort((a, b) => Math.abs(b.residue) - Math.abs(a.residue));
+      let diff = 100 - sum;
+      for (let i = 0; i < residues.length && diff !== 0; i++) {
+        roundedPercentages[residues[i].element] += diff > 0 ? 1 : -1;
+        diff += diff > 0 ? -1 : 1;
+      }
+    }
+    return roundedPercentages;
   }
 
   // Si no está autenticado, mostrar pantalla de login
@@ -434,28 +520,53 @@ export default function ResultsPage() {
                           <tr className="border-b border-[#3A3A3A]">
                             <th className="text-left pb-3 text-[#B3B3B3] font-medium">Nombre</th>
                             <th className="text-left pb-3 text-[#B3B3B3] font-medium">Correo</th>
+                            <th className="text-left pb-3 text-[#B3B3B3] font-medium">Elementos Secundarios</th>
                             <th className="text-left pb-3 text-[#B3B3B3] font-medium">Fecha</th>
                           </tr>
                         </thead>
                         <tbody>
-                          {persons.map((person) => (
-                            <tr 
-                              key={person.id}
-                              className="border-b border-[#3A3A3A]/50 hover:bg-[#1A1A1A]/30"
-                            >
-                              <td className="py-3 font-medium">{person.name}</td>
-                              <td className="py-3 text-[#B3B3B3]">{person.email}</td>
-                              <td className="py-3 text-[#B3B3B3]">
-                                {person.createdAt 
-                                  ? new Date(person.createdAt).toLocaleDateString('es-MX', {
-                                      day: 'numeric', 
-                                      month: 'short', 
-                                      year: 'numeric'
-                                    })
-                                  : "N/A"}
-                              </td>
-                            </tr>
-                          ))}
+                          {persons.map((person) => {
+                            const percentages = calculateElementPercentages(person.respuestas);
+                            const allElements = Object.keys(elementDisplayNames);
+                            const otherElements = allElements.filter(elem => elem !== person.element);
+                            
+                            return (
+                              <tr 
+                                key={person.id}
+                                className="border-b border-[#3A3A3A]/50 hover:bg-[#1A1A1A]/30"
+                              >
+                                <td className="py-3 font-medium">{person.name}</td>
+                                <td className="py-3 text-[#B3B3B3]">{person.email}</td>
+                                <td className="py-3">
+                                  <div className="flex flex-wrap gap-2">
+                                    {otherElements.map((element) => (
+                                      percentages[element] !== undefined && percentages[element] > 0 && (
+                                        <span 
+                                          key={element}
+                                          className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium"
+                                          style={{ 
+                                            backgroundColor: `${elementColors[element as ElementType]}20`,
+                                            color: elementColors[element as ElementType]
+                                          }}
+                                        >
+                                          {elementDisplayNames[element as ElementType]}: {percentages[element]}%
+                                        </span>
+                                      )
+                                    ))}
+                                  </div>
+                                </td>
+                                <td className="py-3 text-[#B3B3B3]">
+                                  {person.createdAt 
+                                    ? new Date(person.createdAt).toLocaleDateString('es-MX', {
+                                        day: 'numeric', 
+                                        month: 'short', 
+                                        year: 'numeric'
+                                      })
+                                    : "N/A"}
+                                </td>
+                              </tr>
+                            );
+                          })}
                         </tbody>
                       </table>
                     </div>
@@ -563,7 +674,8 @@ export default function ResultsPage() {
                         <th className="text-left pb-3 text-[#B3B3B3] font-medium">Nombre</th>
                         <th className="text-left pb-3 text-[#B3B3B3] font-medium">Correo</th>
                         <th className="text-left pb-3 text-[#B3B3B3] font-medium">Estado</th>
-                        <th className="text-left pb-3 text-[#B3B3B3] font-medium">Elemento</th>
+                        <th className="text-left pb-3 text-[#B3B3B3] font-medium">Elemento Principal</th>
+                        <th className="text-left pb-3 text-[#B3B3B3] font-medium">Elementos Secundarios</th>
                         <th className="text-left pb-3 text-[#B3B3B3] font-medium">Fecha</th>
                       </tr>
                     </thead>
@@ -574,38 +686,70 @@ export default function ResultsPage() {
                           statusFilter === "pendiente" ? invitado.estado !== 'completado' :
                           invitado.estado === 'completado'
                         )
-                        .map((invitado) => (
-                          <tr 
-                            key={invitado.id}
-                            className="border-b border-[#3A3A3A]/50 hover:bg-[#1A1A1A]/30"
-                          >
-                            <td className="py-3 font-medium">{invitado.nombre}</td>
-                            <td className="py-3 text-[#B3B3B3]">{invitado.email}</td>
-                            <td className="py-3">
-                              <span className={`inline-block px-3 py-1 rounded-full text-sm font-medium ${
-                                invitado.estado === 'completado'
-                                  ? 'bg-green-500/20 text-green-400'
-                                  : 'bg-yellow-500/20 text-yellow-400'
-                              }`}>
-                                {invitado.estado === 'completado' ? 'Completado' : 'Pendiente'}
-                              </span>
-                            </td>
-                            <td className="py-3 text-[#B3B3B3]">
-                              {invitado.elemento 
-                                ? elementDisplayNames[invitado.elemento as ElementType] || invitado.elemento 
-                                : "—"}
-                            </td>
-                            <td className="py-3 text-[#B3B3B3]">
-                              {invitado.fecha_completado 
-                                ? new Date(invitado.fecha_completado).toLocaleDateString('es-MX', {
-                                    day: 'numeric', 
-                                    month: 'short', 
-                                    year: 'numeric'
-                                  })
-                                : "—"}
-                            </td>
-                          </tr>
-                      ))}
+                        .map((invitado) => {
+                          const percentages = calculateElementPercentages(invitado.respuestas);
+                          const allElements = Object.keys(elementDisplayNames);
+                          const otherElements = allElements.filter(elem => elem !== invitado.elemento);
+                          
+                          return (
+                            <tr 
+                              key={invitado.id}
+                              className="border-b border-[#3A3A3A]/50 hover:bg-[#1A1A1A]/30"
+                            >
+                              <td className="py-3 font-medium">{invitado.nombre}</td>
+                              <td className="py-3 text-[#B3B3B3]">{invitado.email}</td>
+                              <td className="py-3">
+                                <span className={`inline-block px-3 py-1 rounded-full text-sm font-medium ${
+                                  invitado.estado === 'completado'
+                                    ? 'bg-green-500/20 text-green-400'
+                                    : 'bg-yellow-500/20 text-yellow-400'
+                                }`}>
+                                  {invitado.estado === 'completado' ? 'Completado' : 'Pendiente'}
+                                </span>
+                              </td>
+                              <td className="py-3">
+                                {invitado.elemento ? (
+                                  <span 
+                                    className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium"
+                                    style={{ 
+                                      backgroundColor: `${elementColors[invitado.elemento as ElementType]}20`,
+                                      color: elementColors[invitado.elemento as ElementType]
+                                    }}
+                                  >
+                                    {elementDisplayNames[invitado.elemento as ElementType]}
+                                  </span>
+                                ) : "—"}
+                              </td>
+                              <td className="py-3">
+                                <div className="flex flex-wrap gap-2">
+                                  {otherElements.map((element) => (
+                                    percentages[element] !== undefined && percentages[element] > 0 && (
+                                      <span 
+                                        key={element}
+                                        className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium"
+                                        style={{ 
+                                          backgroundColor: `${elementColors[element as ElementType]}20`,
+                                          color: elementColors[element as ElementType]
+                                        }}
+                                      >
+                                        {elementDisplayNames[element as ElementType]}: {percentages[element]}%
+                                      </span>
+                                    )
+                                  ))}
+                                </div>
+                              </td>
+                              <td className="py-3 text-[#B3B3B3]">
+                                {invitado.fecha_completado 
+                                  ? new Date(invitado.fecha_completado).toLocaleDateString('es-MX', {
+                                      day: 'numeric', 
+                                      month: 'short', 
+                                      year: 'numeric'
+                                    })
+                                  : "—"}
+                              </td>
+                            </tr>
+                          );
+                        })}
                     </tbody>
                   </table>
                 </div>

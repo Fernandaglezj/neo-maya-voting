@@ -118,127 +118,245 @@ const ELEMENTOS = [
   },
 ]
 
-// Preguntas del quiz
-const QUIZ_QUESTIONS = [
+// Define el tipo de opción de pregunta para permitir image, video o audio
+
+type QuizOption = {
+  text: string;
+  element: string;
+  image?: string;
+  video?: string;
+  audio?: string;
+};
+
+type QuizQuestion = {
+  title: string;
+  question: string;
+  type: "image" | "text";
+  options: QuizOption[];
+};
+
+// Cambia la declaración de QUIZ_QUESTIONS:
+const QUIZ_QUESTIONS: QuizQuestion[] = [
   {
-    question: "Estás en el corazón de la selva maya. Frente a ti, cuatro caminos se abren. ¿Cuál tomas?",
+    title: "🪶 El Altar de los Cuatro Signos",
+    question: "En el momento en que te acercas al altar sagrado, ¿cuál de estos objetos llama tu atención?",
     type: "image",
     options: [
       {
-        text: "El que sube hacia la luz del sol entre raíces enredadas.",
+        text: "Un cuenco de obsidiana que vibra con un zumbido interior.",
         element: "fuego",
-        image: "/images/path-fire.png",
+        image: "/images/1-AA.png",
       },
       {
-        text: "El que corre junto a un río sereno que murmura secretos.",
+        text: "Un trozo de jade oscuro envuelto en hilos rojos, tibio al contacto.",
         element: "agua",
-        image: "/images/path-water.png",
+        image: "/images/1-BB.png",
       },
       {
-        text: "El que se eleva en espiral hacia las copas de los árboles y el viento canta.",
+        text: "Un anillo suspendido en el aire, girando sin sostén.",
         element: "aire",
-        image: "/images/path-air.png",
+        image: "/images/1-CC.png",
       },
       {
-        text: "El que te guía por un sendero firme con huellas antiguas marcadas en piedra.",
+        text: "Una piedra agrietada con formas antiguas que sangran luz.",
         element: "tierra",
-        image: "/images/path-earth.png",
+        image: "/images/1-DD.png",
       },
     ],
   },
   {
-    question: "Cuando los retos aparecen, tú…",
+    title: "🔥 Invocación del Corazón",
+    question: "En el momento en que el fuego sagrado es encendido y se pide guía, tú…",
     type: "text",
     options: [
       {
-        text: "Actúas con impulso y entusiasmo, te gusta liderar la acción.",
+        text: "Sientes que debes dar el primer paso, aunque no sepas hacia dónde.",
         element: "fuego",
       },
       {
-        text: "Te adaptas al ritmo de la situación, fluido y sereno.",
+        text: "Cierras los ojos y dejas que la energía te atraviese.",
         element: "agua",
       },
       {
-        text: "Piensas rápido, propones ideas y buscas soluciones creativas.",
+        text: "Observas lo invisible, como si algo te hablara entre pensamientos.",
         element: "aire",
       },
       {
-        text: "Eres constante, analizas y das pasos seguros con compromiso.",
+        text: "Tomas una posición firme, como si el suelo mismo te sostuviera.",
         element: "tierra",
       },
     ],
   },
   {
-    question: "En el consejo de sabios, tu voz…",
+    title: "🌀 Consejo de los Sonidos Olvidados",
+    question: "En un antiguo templo, cuatro ecos resuenan sin fin. Solo uno entra en tu pecho y se queda ¿Cuál eliges?",
     type: "text",
     options: [
       {
-        text: "Motiva, enciende y mueve al grupo hacia la acción.",
+        text: "Un canto fragmentado que parece salido de tu infancia.",
+        element: "fuego",
+        audio: "/audio/3-A.mp3"
+      },
+      {
+        text: "Un lamento que sube desde la piedra mojada.",
+        element: "agua",
+        audio: "/audio/3-B.mp3"
+      },
+      {
+        text: "Un silbido breve que desaparece antes de que lo escuches completo.",
+        element: "aire",
+        audio: "/audio/3-C.mp3"
+      },
+      {
+        text: "Un golpe constante que parece acompasado con tus latidos.",
+        element: "tierra",
+        audio: "/audio/3-D.mp3"
+      }
+    ],
+  },
+  {
+    title: "🌑 El Guardián del Umbral",
+    question: "Un anciano cubierto con mantos de ceniza te detiene antes de cruzar el río sagrado. No te dice nada, solo te mira a los ojos. ¿Cómo reaccionas? ",
+    type: "text",
+    options: [
+      {
+        text: "Lo reconoces como una prueba y cruzas con paso firme.",
         element: "fuego",
       },
       {
-        text: "Calma tensiones y encuentra acuerdos.",
+        text: "Lo observas con respeto, y esperas a que él haga el primer movimiento.",
         element: "agua",
       },
       {
-        text: "Ilumina con nuevas perspectivas y palabras ingeniosas.",
+        text: "Le haces una pregunta con voz tranquila, buscando comprensión.",
         element: "aire",
       },
       {
-        text: "Aporta equilibrio, estructura y reflexión.",
+        text: "Das media vuelta, confiando en que si es el momento, volverás por otro camino.",
         element: "tierra",
       },
     ],
   },
   {
-    question: "Cuando alguien necesita de ti, tu energía se expresa como…",
-    type: "image",
+    title: "🌘 Kinam - El Día Sin Nombre ",
+    question: "Durante el Kinam, una decisión importante llega a ti de forma inesperada. Nadie puede ayudarte. ¿Qué haces? ",
+    type: "text",
     options: [
       {
-        text: "Un fuego que protege e inspira.",
+        text: "Tomas una decisión rápida y sigues adelante, confiando en tu instinto.",
         element: "fuego",
-        image: "/images/energy-fire.png",
       },
       {
-        text: "Una corriente que abraza y acompaña.",
+        text: "Te tomas un momento para sentir qué es lo correcto, y entonces actúas.",
         element: "agua",
-        image: "/images/energy-water.png",
       },
       {
-        text: "Una brisa que renueva y despierta.",
+        text: "Consideras distintas posibilidades antes de elegir una dirección.",
         element: "aire",
-        image: "/images/energy-air.png",
       },
       {
-        text: "Una raíz que sostiene y nutre.",
+        text: "Optas por mantener las cosas estables, aunque eso implique esperar.",
         element: "tierra",
-        image: "/images/energy-earth.png",
       },
     ],
   },
   {
-    question: "Si fueras un símbolo maya, serías…",
+    title: "🎭 Máscara del Nahual Dormido",
+    question: "Ante ti cuelgan cuatro máscaras mayas. No sabes a quién representan, pero una te observa. ¿Cuál tomas? ",
     type: "image",
     options: [
       {
-        text: "Kin, el sol: fuente de vida y acción.",
+        text: "La que pesa más de lo que aparenta.",
         element: "fuego",
-        image: "/images/5-A.png",
+        image: "/images/6-A.png",
       },
       {
-        text: "Muluc, el agua: intuición y transformación.",
+        text: "La que huele a humo de copal y tierra húmeda.",
         element: "agua",
-        image: "/images/5-B.png",
+        image: "/images/6-B.png",
       },
       {
-        text: "Ik', el viento: espíritu libre y pensamiento veloz.",
+        text: "La que se mueve con el viento aunque no haya brisa.",
         element: "aire",
-        image: "/images/5-C.png",
+        image: "/images/6-C.png",
       },
       {
-        text: "Kan, el maíz: nutrición, paciencia y crecimiento.",
+        text: "La que no tiene aberturas, pero te deja respirar.",
         element: "tierra",
-        image: "/images/5-D.png",
+        image: "/images/6-D.png",
+      },
+    ],
+  },
+  {
+    title: "🌾 El Consejo Silencioso",
+    question: "Durante una ceremonia, el fuego se apaga. Los ancianos te miran. ¿Qué sientes que no puede faltar para restaurar el equilibrio? ",
+    type: "text",
+    options: [
+      {
+        text: "Iniciativa.",
+        element: "fuego",
+      },
+      {
+        text: "Compasión.",
+        element: "agua",
+      },
+      {
+        text: "Visión.",
+        element: "aire",
+      },
+      {
+        text: "Estabilidad.",
+        element: "tierra",
+      },
+    ],
+  },
+  {
+    title: "🌙 Sueño del Primer Jaguar",
+    question: "Desde hace tiempo sueñas con un mismo lugar. Lo que sucede ahí es… ",
+    type: "image",
+    options: [
+      {
+        text: "Una figura cubierta de plumas deja algo en tus manos y desaparece.",
+        element: "fuego",
+        video: "/videos/8-A.mp4",
+      },
+      {
+        text: "Abres una puerta que se desplaza en espiral, pero no entras.",
+        element: "agua",
+        video: "/videos/8-B.mp4",
+      },
+      {
+        text: "Una montaña se parte en dos sin ruido, y de ella sale neblina.",
+        element: "aire",
+        video: "/videos/8-C.mp4",
+      },
+      {
+        text: "Un tambor suena bajo tierra y tus pies se mueven solos.",
+        element: "tierra",
+        video: "/videos/8-D.mp4",
+      },
+    ],
+  },
+  {
+    title: "🗝️ Inicio del Mundo",
+    question: "Antes del primer amanecer, tú despiertas. Aún no hay tiempo, ni forma, ni cuerpo. Solo intención. Lo primero que haces es…",
+    type: "text",
+    options: [
+      {
+        text: "Llamar con tu voz para que otros te escuchen.",
+        element: "fuego",
+      },
+      {
+        text: "Fundirte con lo invisible y esperar el momento justo.",
+        element: "agua",
+      },
+      {
+        text: "Soñar lo que vendrá, aunque aún no exista.",
+        element: "aire",
+      },
+      {
+        text: "Trazar líneas en el polvo, como si siempre hubieran estado ahí.",
+        element: "tierra",
       },
     ],
   },
@@ -248,6 +366,25 @@ const QUIZ_QUESTIONS = [
 interface UserInfo {
   name: string
   email: string
+}
+
+// Componente para subir audio (solo visible si es admin)
+function AudioUploader({ onUpload }: { onUpload: (url: string) => void }) {
+  const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    // Subir a Supabase Storage o a un endpoint de tu preferencia
+    // Aquí solo se simula la subida y se genera una URL local
+    const url = URL.createObjectURL(file);
+    onUpload(url);
+    // En producción, deberías subir el archivo y obtener la URL pública
+  };
+  return (
+    <div className="mb-2">
+      <label className="block text-white/80 mb-1 text-sm">Subir audio para opción:</label>
+      <input type="file" accept="audio/*" onChange={handleFileChange} className="text-white" />
+    </div>
+  );
 }
 
 export default function DescubreElementoPage() {
@@ -336,15 +473,10 @@ export default function DescubreElementoPage() {
   // Función para borrar todos los datos y reiniciar desde el formulario
   const resetCompletely = () => {
     setAnimating(true)
-    // Borrar datos del localStorage
     try {
       localStorage.removeItem("elementQuizData")
-    } catch (error) {
-      console.error("Error removing from localStorage:", error)
-    }
-    
+    } catch (error) {}
     setTimeout(() => {
-      // Reiniciar todos los estados
       setCurrentQuestion(0)
       setAnswers([])
       setLetterCounts({A: 0, B: 0, C: 0, D: 0})
@@ -357,12 +489,22 @@ export default function DescubreElementoPage() {
     }, 500)
   }
 
-  // Verificar si el usuario ya ha completado el quiz
+  // Al cargar la página, limpia cualquier información previa de sesiones anteriores
   useEffect(() => {
-    // En lugar de cargar automáticamente los datos guardados, siempre
-    // iniciamos con el formulario para que cada usuario complete el quiz
+    // Limpiar datos de localStorage
+    try {
+      localStorage.removeItem("elementQuizData");
+    } catch (error) {
+      // Ignorar error
+    }
+    // Reiniciar todos los estados
+    setUserInfo({ name: "", email: "" });
+    setAnswers([]);
+    setLetterCounts({ A: 0, B: 0, C: 0, D: 0 });
+    setTiedLetters([]);
+    setResult(null);
+    setQuizCompleted(false);
     setView("form");
-    
     // Limpiamos el timeout por buenas prácticas
     return () => {
       if (emailCheckTimeout.current) {
@@ -538,17 +680,28 @@ export default function DescubreElementoPage() {
     }
   }
 
+  // Función para manejar la respuesta
   const handleAnswer = (element: string, optionIndex: number) => {
     // Determinar la letra basada en el índice de la opción (0->A, 1->B, 2->C, 3->D)
     const optionLetter = String.fromCharCode(65 + optionIndex)
     
-    // Actualizar respuestas y conteo de letras
+    // Actualizar respuestas
     const newAnswers = [...answers, element]
     setAnswers(newAnswers)
     
     // Actualizar conteo de letras
     const newLetterCounts = {...letterCounts}
-    newLetterCounts[optionLetter as keyof typeof newLetterCounts] += 1
+    
+    // Score por pregunta según el índice (0-based)
+    let scoreMultiplier = 1;
+    if (currentQuestion === 4) {
+      scoreMultiplier = 2; // Pregunta 5
+    } else if (currentQuestion === 8) {
+      scoreMultiplier = 4; // Pregunta 9
+    }
+    
+    // Aplicar el multiplicador de puntaje
+    newLetterCounts[optionLetter as keyof typeof newLetterCounts] += scoreMultiplier
     setLetterCounts(newLetterCounts)
 
     if (currentQuestion < QUIZ_QUESTIONS.length - 1) {
@@ -588,51 +741,62 @@ export default function DescubreElementoPage() {
         }
       })
       .then(() => {
-        toast({
-          title: "Resultado guardado",
-          description: "Tu elemento ha sido registrado exitosamente.",
-          variant: "success"
-        });
-        
-        // Si es un invitado de PalMar 2025, actualizar su estado
-        if (isPalMarInvitee && inviteeInfo) {
-          console.log("Actualizando estado de invitado PalMar:", {
-            email: userInfo.email,
-            elemento: resultElement,
-            invitadoId: inviteeInfo.id
-          });
-
-          actualizarInvitadoPalMar(userInfo.email, resultElement)
-            .then((result) => {
-              if (result) {
-                // Toast eliminado para no mostrar mensaje de asistencia registrada
-                console.log("Asistencia PalMar registrada:", { 
-                  email: userInfo.email, 
-                  elemento: resultElement 
-                });
-              } else {
-                console.error("No se pudo actualizar el estado del invitado PalMar:", { 
-                  email: userInfo.email, 
-                  elemento: resultElement 
-                });
-                
+        // Verificar si el correo está en personas_invitadas y actualizar
+        verificarInvitadoPalMar(userInfo.email).then((invitado) => {
+          console.log("[PalMar] Resultado de verificarInvitadoPalMar:", invitado);
+          if (invitado) {
+            const percentages = {
+              agua: letterCounts.B || 0,
+              fuego: letterCounts.A || 0,
+              tierra: letterCounts.D || 0,
+              aire: letterCounts.C || 0
+            };
+            console.log("[PalMar] Llamando a actualizarInvitadoPalMar para:", userInfo.email, invitado);
+            actualizarInvitadoPalMar(
+              userInfo.email,
+              resultElement,
+              percentages,
+              {
+                letterCounts,
+                tiebreaker: letter,
+                completedAt: new Date().toISOString()
+              }
+            )
+              .then((result) => {
+                if (result) {
+                  console.log("Asistencia PalMar registrada:", { 
+                    email: userInfo.email, 
+                    elemento: result 
+                  });
+                } else {
+                  console.error("No se pudo actualizar el estado del invitado PalMar:", { 
+                    email: userInfo.email, 
+                    elemento: result 
+                  });
+                  toast({
+                    title: "Error en PalMar 2025",
+                    description: "Hubo un problema al registrar tu asistencia. Contacta al administrador.",
+                    variant: "destructive"
+                  });
+                }
+              })
+              .catch(error => {
+                console.error("Error al actualizar estado de invitado PalMar:", error);
                 toast({
                   title: "Error en PalMar 2025",
                   description: "Hubo un problema al registrar tu asistencia. Contacta al administrador.",
                   variant: "destructive"
                 });
-              }
-            })
-            .catch(error => {
-              console.error("Error al actualizar estado de invitado PalMar:", error);
-              
-              toast({
-                title: "Error en PalMar 2025",
-                description: "Hubo un problema al registrar tu asistencia. Contacta al administrador.",
-                variant: "destructive"
               });
-            });
-        }
+          } else {
+            console.error("[PalMar] Invitado no encontrado en personas_invitadas para:", userInfo.email);
+          }
+        });
+        toast({
+          title: "Resultado guardado",
+          description: "Tu elemento ha sido registrado exitosamente.",
+          variant: "success"
+        });
       })
       .catch(error => {
         console.error("Error al guardar en Supabase:", error);
@@ -658,109 +822,42 @@ export default function DescubreElementoPage() {
 
   // Calcular resultado basado en la mayoría de letras
   const calculateResult = (counts: {A: number, B: number, C: number, D: number}) => {
-    // Encontrar el máximo conteo
-    const maxCount = Math.max(...Object.values(counts))
+    // Convertir conteos a array para ordenar
+    const countsArray = Object.entries(counts).map(([letter, count]) => ({
+      letter,
+      count,
+      element: letterToElement[letter]
+    }))
     
-    // Verificar si hay empate
-    const tied = Object.entries(counts).filter(([_, count]) => count === maxCount)
+    // Ordenar por conteo de mayor a menor
+    countsArray.sort((a, b) => b.count - a.count)
     
-    if (tied.length > 1) {
-      // Hay empate - mostrar pregunta de desempate
-      const tiedLettersList = tied.map(([letter, _]) => letter)
-      setTiedLetters(tiedLettersList)
+    // Verificar si hay empate entre los dos primeros
+    if (countsArray[0].count === countsArray[1].count) {
+      // Guardar las letras empatadas
+      const tiedLetters = countsArray
+        .filter(item => item.count === countsArray[0].count)
+        .map(item => item.letter)
       
-      setAnimating(true)
-      setTimeout(() => {
-        setView("tiebreaker")
-        setAnimating(false)
-      }, 500)
+      setTiedLetters(tiedLetters)
+      setView("tiebreaker")
     } else {
-      // No hay empate - mostrar resultado directamente
-      const winningLetter = tied[0][0]
-      const resultElement = letterToElement[winningLetter] || 'fuego'
+      // No hay empate, mostrar resultado
+      const result = letterToElement[countsArray[0].letter]
+      setResult(result)
       
-      // Añadir una transición más dramática para el resultado
-      setAnimating(true)
-      // Primero, ponemos la pantalla en negro
-      document.body.classList.add('transition-to-element')
+      // Guardar en Supabase
+      guardarResultadoElemento({
+        nombre: userInfo.name,
+        correo_electronico: userInfo.email,
+        elemento: result,
+        respuestas: {
+          letterCounts: counts,
+          completedAt: new Date().toISOString()
+        }
+      })
       
-      setTimeout(() => {
-        setResult(resultElement)
-        setView("result")
-        setQuizCompleted(true)
-
-        // Guardar el resultado en Supabase, pero no en localStorage
-        guardarResultadoElemento({
-          nombre: userInfo.name,
-          correo_electronico: userInfo.email,
-          elemento: resultElement,
-          respuestas: {
-            letterCounts: counts,
-            completedAt: new Date().toISOString()
-          }
-        })
-        .then(() => {
-          toast({
-            title: "Resultado guardado",
-            description: "Tu elemento ha sido registrado exitosamente.",
-            variant: "success"
-          });
-          
-          // Si es un invitado de PalMar 2025, actualizar su estado
-          if (isPalMarInvitee && inviteeInfo) {
-            console.log("Actualizando estado de invitado PalMar:", {
-              email: userInfo.email,
-              elemento: resultElement,
-              invitadoId: inviteeInfo.id
-            });
-
-            actualizarInvitadoPalMar(userInfo.email, resultElement)
-              .then((result) => {
-                if (result) {
-                  // Toast eliminado para no mostrar mensaje de asistencia registrada
-                  console.log("Asistencia PalMar registrada:", { 
-                    email: userInfo.email, 
-                    elemento: resultElement 
-                  });
-                } else {
-                  console.error("No se pudo actualizar el estado del invitado PalMar:", { 
-                    email: userInfo.email, 
-                    elemento: resultElement 
-                  });
-                  
-                  toast({
-                    title: "Error en PalMar 2025",
-                    description: "Hubo un problema al registrar tu asistencia. Contacta al administrador.",
-                    variant: "destructive"
-                  });
-                }
-              })
-              .catch(error => {
-                console.error("Error al actualizar estado de invitado PalMar:", error);
-                
-                toast({
-                  title: "Error en PalMar 2025",
-                  description: "Hubo un problema al registrar tu asistencia. Contacta al administrador.",
-                  variant: "destructive"
-                });
-              });
-          }
-        })
-        .catch(error => {
-          console.error("Error al guardar resultado:", error);
-          toast({
-            title: "Error al guardar",
-            description: "No pudimos guardar tu resultado, pero puedes continuar con la experiencia.",
-            variant: "destructive"
-          });
-        });
-
-        // Quitar la transición después de un tiempo
-        setTimeout(() => {
-          document.body.classList.remove('transition-to-element')
-          setAnimating(false)
-        }, 600)
-      }, 800)
+      setView("result")
     }
   }
 
@@ -993,9 +1090,12 @@ export default function DescubreElementoPage() {
               className={`bg-black/30 backdrop-blur-sm border border-white/20 rounded-2xl p-8 mb-8 transition-all duration-500 
               ${animating ? "opacity-0 transform translate-x-10" : "opacity-100 transform translate-x-0"}`}
             >
-              <h2 className="text-3xl md:text-4xl font-bold text-white mb-8 text-center">
-                {QUIZ_QUESTIONS[currentQuestion].question}
+              <h2 className="text-3xl md:text-4xl font-bold text-white mb-4 text-center">
+                {QUIZ_QUESTIONS[currentQuestion].title}
               </h2>
+              <p className="text-xl text-white/90 mb-8 text-center">
+                {QUIZ_QUESTIONS[currentQuestion].question}
+              </p>
 
               {QUIZ_QUESTIONS[currentQuestion].type === "image" ? (
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
@@ -1009,14 +1109,35 @@ export default function DescubreElementoPage() {
                       onMouseEnter={() => setHoveredOption(index)}
                       onMouseLeave={() => setHoveredOption(null)}
                     >
-                      <div className="relative aspect-square">
-                        <Image
-                          src={'image' in option ? option.image : "/placeholder.svg"}
-                          alt={option.text}
-                          fill
-                          className="object-cover"
-                          sizes="(max-width: 768px) 100vw, 50vw"
-                        />
+                      <div className="relative aspect-square flex items-center justify-center bg-black/10">
+                        {option.video ? (
+                          <video
+                            ref={el => {
+                              if (el && hoveredOption === index) {
+                                el.play();
+                              } else if (el) {
+                                el.pause();
+                                el.currentTime = 0;
+                              }
+                            }}
+                            controls
+                            muted
+                            width="100%"
+                            style={{ borderRadius: '1rem', maxHeight: '100%' }}
+                            onClick={e => e.stopPropagation()}
+                          >
+                            <source src={option.video} type="video/mp4" />
+                            Tu navegador no soporta el video.
+                          </video>
+                        ) : (
+                          <Image
+                            src={option.image || "/placeholder.svg"}
+                            alt={option.text}
+                            fill
+                            className="object-cover"
+                            sizes="(max-width: 768px) 100vw, 50vw"
+                          />
+                        )}
                         <div
                           className={`absolute inset-0 bg-gradient-to-t ${
                             hoveredOption === index ? getElementBgGradient(option.element) : "from-black/60 to-black/0"
@@ -1028,37 +1149,123 @@ export default function DescubreElementoPage() {
                           </span>
                         </div>
                       </div>
+                      {option.audio && (
+                        <audio
+                          controls
+                          controlsList="nodownload noplaybackrate"
+                          className="mt-2 w-full custom-audio-player"
+                          style={{
+                            background: '#232323',
+                            borderRadius: '1rem',
+                            padding: '0.5rem',
+                            border: '2px solid #E1B058',
+                            boxShadow: '0 2px 8px #0004',
+                            outline: 'none',
+                            accentColor: '#E1B058',
+                            colorScheme: 'dark',
+                          }}
+                        >
+                          <source src={option.audio} type="audio/mp3" />
+                          Tu navegador no soporta el audio.
+                        </audio>
+                      )}
+                      {/* Si eres admin, muestra el uploader para cambiar el audio de la opción */}
+                      {process.env.NEXT_PUBLIC_ADMIN_MODE === 'true' && (
+                        <AudioUploader onUpload={url => {
+                          // Aquí podrías actualizar la opción en el estado si lo deseas
+                          // Por simplicidad, solo muestra la URL
+                          alert('URL de audio para usar en la opción: ' + url);
+                        }} />
+                      )}
                     </div>
                   ))}
                 </div>
               ) : (
-                <div className="space-y-6">
-                  {QUIZ_QUESTIONS[currentQuestion].options.map((option, index) => (
-                    <button
-                      key={index}
-                      onClick={() => handleAnswer(option.element, index)}
-                      onMouseEnter={() => setHoveredOption(index)}
-                      onMouseLeave={() => setHoveredOption(null)}
-                      className={`w-full text-left p-5 rounded-xl 
-                               ${
-                                 hoveredOption === index
-                                   ? `bg-gradient-to-r ${getElementBgGradient(option.element)}`
-                                   : "bg-white/5"
-                               }
-                               hover:bg-white/10 
-                               border-2 ${
-                                 hoveredOption === index ? getElementBorderColor(option.element) : "border-white/10"
-                               } 
-                               hover:border-white/30 transition-all duration-300
-                               text-white hover:text-white flex items-start`}
-                    >
-                      <span className="inline-block w-10 h-10 rounded-full bg-white/20 flex items-center justify-center mr-4 shrink-0 text-lg font-bold shadow-inner">
-                        {String.fromCharCode(65 + index)}
-                      </span>
-                      <span className="text-lg">{option.text}</span>
-                    </button>
-                  ))}
-                </div>
+                QUIZ_QUESTIONS[currentQuestion].type === "text" ? (
+                  currentQuestion === 2 ? (
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                      {QUIZ_QUESTIONS[currentQuestion].options.map((option, index) => (
+                        <div key={index} className="bg-[#18181b] rounded-2xl p-6 flex flex-col items-center shadow-lg border border-[#292929]">
+                          <button
+                            onClick={() => handleAnswer(option.element, index)}
+                            onMouseEnter={() => setHoveredOption(index)}
+                            onMouseLeave={() => setHoveredOption(null)}
+                            className={`w-12 h-12 mb-4 rounded-full flex items-center justify-center text-xl font-bold shadow-inner transition-all duration-300
+                              ${hoveredOption === index ? 'bg-amber-500 text-white scale-110' : 'bg-white/10 text-white/80'}`}
+                          >
+                            {String.fromCharCode(65 + index)}
+                          </button>
+                          {option.audio && (
+                            <div className="w-full flex flex-col items-center">
+                              <audio
+                                controls
+                                controlsList="nodownload noplaybackrate"
+                                className="w-full custom-audio-player"
+                                style={{
+                                  background: '#232323',
+                                  borderRadius: '1rem',
+                                  padding: '0.5rem',
+                                  border: '2px solid #E1B058',
+                                  boxShadow: '0 2px 8px #0004',
+                                  outline: 'none',
+                                  accentColor: '#E1B058',
+                                  colorScheme: 'dark',
+                                }}
+                              >
+                                <source src={option.audio} type="audio/mp3" />
+                                Tu navegador no soporta el audio.
+                              </audio>
+                            </div>
+                          )}
+                        </div>
+                      ))}
+                    </div>
+                  ) : (
+                    <div className="space-y-6">
+                      {QUIZ_QUESTIONS[currentQuestion].options.map((option, index) => (
+                        <button
+                          key={index}
+                          onClick={() => handleAnswer(option.element, index)}
+                          onMouseEnter={() => setHoveredOption(index)}
+                          onMouseLeave={() => setHoveredOption(null)}
+                          className={`w-full text-left p-5 rounded-xl 
+                            ${hoveredOption === index ? `bg-gradient-to-r ${getElementBgGradient(option.element)}` : "bg-white/5"}
+                            hover:bg-white/10 
+                            border-2 ${hoveredOption === index ? getElementBorderColor(option.element) : "border-white/10"} 
+                            hover:border-white/30 transition-all duration-300
+                            text-white hover:text-white flex items-start mb-2`}
+                        >
+                          <span className="inline-block w-10 h-10 rounded-full bg-white/20 flex items-center justify-center mr-4 shrink-0 text-lg font-bold shadow-inner">
+                            {String.fromCharCode(65 + index)}
+                          </span>
+                          <span className="text-lg">{option.text}</span>
+                        </button>
+                      ))}
+                    </div>
+                  )
+                ) : (
+                  <div className="space-y-6">
+                    {QUIZ_QUESTIONS[currentQuestion].options.map((option, index) => (
+                      <button
+                        key={index}
+                        onClick={() => handleAnswer(option.element, index)}
+                        onMouseEnter={() => setHoveredOption(index)}
+                        onMouseLeave={() => setHoveredOption(null)}
+                        className={`w-full text-left p-5 rounded-xl 
+                          ${hoveredOption === index ? `bg-gradient-to-r ${getElementBgGradient(option.element)}` : "bg-white/5"}
+                          hover:bg-white/10 
+                          border-2 ${hoveredOption === index ? getElementBorderColor(option.element) : "border-white/10"} 
+                          hover:border-white/30 transition-all duration-300
+                          text-white hover:text-white flex items-start mb-2`}
+                      >
+                        <span className="inline-block w-10 h-10 rounded-full bg-white/20 flex items-center justify-center mr-4 shrink-0 text-lg font-bold shadow-inner">
+                          {String.fromCharCode(65 + index)}
+                        </span>
+                        <span className="text-lg">{option.text}</span>
+                      </button>
+                    ))}
+                  </div>
+                )
               )}
             </div>
           </div>
@@ -1098,7 +1305,7 @@ export default function DescubreElementoPage() {
                     <span className="inline-block w-10 h-10 rounded-full bg-white/20 flex items-center justify-center mr-4 shrink-0 text-lg font-bold shadow-inner">
                       {option.letter}
                     </span>
-                    <span className="text-lg">{option.text}</span>
+                    {/* No mostrar el texto de la opción */}
                   </button>
                 ))}
               </div>
@@ -1123,6 +1330,36 @@ export default function DescubreElementoPage() {
                   <div className="text-white/90 text-lg md:text-xl font-medium mb-6">
                     {ELEMENTOS.find(e => e.id === result)?.descripcion}
                   </div>
+                </div>
+              </div>
+
+              {/* Descripción principal del elemento */}
+              <div className="bg-white/5 backdrop-blur-sm border border-white/10 rounded-lg p-6 mb-8">
+                <div className="text-white/80 leading-relaxed text-center">
+                  {ELEMENTOS.find(e => e.id === result)?.detalle.includes('\n') ? (
+                    <>
+                      {ELEMENTOS.find(e => e.id === result)?.detalle.split('\n').map((line, index) => (
+                        <p key={index} className="mb-2">
+                          {line.startsWith('**') && line.endsWith('**') ? (
+                            <strong>{line.replace(/\*\*/g, '')}</strong>
+                          ) : line.includes('**') ? (
+                            <>
+                              {line.split('**').map((part, i) => (
+                                i % 2 === 0 ? part : <strong key={i}>{part}</strong>
+                              ))}
+                            </>
+                          ) : (
+                            line
+                          )}
+                        </p>
+                      ))}
+                    </>
+                  ) : (
+                    <p className="mb-4">{ELEMENTOS.find(e => e.id === result)?.detalle}</p>
+                  )}
+                  <p className="italic text-white/60">
+                    Este elemento refleja tus fortalezas naturales y la energía que aportas al equipo.
+                  </p>
                 </div>
               </div>
 
@@ -1161,42 +1398,165 @@ export default function DescubreElementoPage() {
                 </div>
               </div>
 
-              <div className="bg-white/5 backdrop-blur-sm border border-white/10 rounded-lg p-6 mb-8">
-                <div className="text-white/80 leading-relaxed text-center">
-                  {ELEMENTOS.find(e => e.id === result)?.detalle.includes('\n') ? (
-                    <>
-                      {ELEMENTOS.find(e => e.id === result)?.detalle.split('\n').map((line, index) => (
-                        <p key={index} className="mb-2">
-                          {line.startsWith('**') && line.endsWith('**') ? (
-                            <strong>{line.replace(/\*\*/g, '')}</strong>
-                          ) : line.includes('**') ? (
-                            <>
-                              {line.split('**').map((part, i) => (
-                                i % 2 === 0 ? part : <strong key={i}>{part}</strong>
-                              ))}
-                            </>
-                          ) : (
-                            line
-                          )}
-                        </p>
-                      ))}
-                    </>
-                  ) : (
-                    <p className="mb-4">{ELEMENTOS.find(e => e.id === result)?.detalle}</p>
-                  )}
-                  <p className="italic text-white/60">
-                    Este elemento refleja tus fortalezas naturales y la energía que aportas al equipo.
-                  </p>
+              {/* Sección de elementos secundarios - solo para Fuego */}
+              {result === 'fuego' && (
+                <div className="bg-white/5 backdrop-blur-sm border border-white/10 rounded-lg p-6 mb-8">
+                  <h3 className="text-xl font-bold text-white mb-4 text-center">✨ También habita en ti el equilibrio de los otros elementos:</h3>
+                  <div className="space-y-3">
+                    {Object.entries(letterCounts).map(([letter, count]) => {
+                      const element = letterToElement[letter];
+                      if (element === result) return null; // No mostrar el elemento principal
+                      // Calcular el porcentaje total
+                      const total = Object.values(letterCounts).reduce((a, b) => a + b, 0);
+                      const percentage = Math.round((count / total) * 100);
+                      if (percentage === 0) return null;
+                      type ElementInfo = {
+                        agua: { emoji: string; message: string };
+                        aire: { emoji: string; message: string };
+                        tierra: { emoji: string; message: string };
+                      };
+                      const elementInfo: ElementInfo = {
+                        agua: { emoji: "💧", message: "tu empatía suaviza tu fuego" },
+                        aire: { emoji: "🌬️", message: "tu visión se enriquece con creatividad" },
+                        tierra: { emoji: "🌱", message: "tu impulso se fortalece con constancia" }
+                      };
+                      return (
+                        <div key={letter} className="flex items-center justify-center text-white/90">
+                          <span className="text-2xl mr-2">{elementInfo[element as keyof ElementInfo].emoji}</span>
+                          <span className="font-medium">{ELEMENTOS.find(e => e.id === element)?.nombre}</span>
+                          <span className="mx-2">•</span>
+                          <span className="text-amber-400 font-bold">{percentage}%</span>
+                          <span className="mx-2">–</span>
+                          <span className="text-white/70">{elementInfo[element as keyof ElementInfo].message}</span>
+                        </div>
+                      );
+                    })}
+                  </div>
+                  <p className="text-white/80 text-center mt-6">Tu fuego guía, pero es el balance con los demás elementos lo que te convierte en una fuerza poderosa y sabia.</p>
                 </div>
-              </div>
+              )}
+
+              {/* Sección de elementos secundarios - solo para Aire */}
+              {result === 'aire' && (
+                <div className="bg-white/5 backdrop-blur-sm border border-white/10 rounded-lg p-6 mb-8">
+                  <h3 className="text-xl font-bold text-white mb-4 text-center">✨ También habita en ti el equilibrio de los otros elementos:</h3>
+                  <div className="space-y-3">
+                    {Object.entries(letterCounts).map(([letter, count]) => {
+                      const element = letterToElement[letter];
+                      if (element === result) return null;
+                      const total = Object.values(letterCounts).reduce((a, b) => a + b, 0);
+                      const percentage = Math.round((count / total) * 100);
+                      if (percentage === 0) return null;
+                      type ElementInfoAire = {
+                        fuego: { emoji: string; message: string };
+                        agua: { emoji: string; message: string };
+                        tierra: { emoji: string; message: string };
+                      };
+                      const elementInfoAire: ElementInfoAire = {
+                        fuego: { emoji: "🔥", message: "te impulsa a llevar tus ideas a la acción." },
+                        agua: { emoji: "💧", message: "nutre tu comunicación con empatía." },
+                        tierra: { emoji: "🌱", message: "aterriza tus pensamientos en planes concretos." }
+                      };
+                      if (!(element in elementInfoAire)) return null;
+                      return (
+                        <div key={letter} className="flex items-center justify-center text-white/90">
+                          <span className="text-2xl mr-2">{elementInfoAire[element as keyof ElementInfoAire].emoji}</span>
+                          <span className="font-medium">{ELEMENTOS.find(e => e.id === element)?.nombre}</span>
+                          <span className="mx-2">•</span>
+                          <span className="text-amber-400 font-bold">{percentage}%</span>
+                          <span className="mx-2">–</span>
+                          <span className="text-white/70">{elementInfoAire[element as keyof ElementInfoAire].message}</span>
+                        </div>
+                      );
+                    })}
+                  </div>
+                  <p className="text-white/80 text-center mt-6">Tu aire es libre, creativo y despierto, pero es gracias a la danza con los otros elementos que tus ideas toman forma y dirección.</p>
+                </div>
+              )}
+
+              {/* Sección de elementos secundarios - solo para Tierra */}
+              {result === 'tierra' && (
+                <div className="bg-white/5 backdrop-blur-sm border border-white/10 rounded-lg p-6 mb-8">
+                  <h3 className="text-xl font-bold text-white mb-4 text-center">✨ También habita en ti el equilibrio de los otros elementos:</h3>
+                  <div className="space-y-3">
+                    {Object.entries(letterCounts).map(([letter, count]) => {
+                      const element = letterToElement[letter];
+                      if (element === result) return null;
+                      const total = Object.values(letterCounts).reduce((a, b) => a + b, 0);
+                      const percentage = Math.round((count / total) * 100);
+                      if (percentage === 0) return null;
+                      type ElementInfoTierra = {
+                        fuego: { emoji: string; message: string };
+                        agua: { emoji: string; message: string };
+                        aire: { emoji: string; message: string };
+                      };
+                      const elementInfoTierra: ElementInfoTierra = {
+                        fuego: { emoji: "🔥", message: "enciende tu determinación." },
+                        agua: { emoji: "💧", message: "suaviza tu fuerza con sensibilidad." },
+                        aire: { emoji: "🌬️", message: "abre tu mente a nuevas formas de construir." }
+                      };
+                      if (!(element in elementInfoTierra)) return null;
+                      return (
+                        <div key={letter} className="flex items-center justify-center text-white/90">
+                          <span className="text-2xl mr-2">{elementInfoTierra[element as keyof ElementInfoTierra].emoji}</span>
+                          <span className="font-medium">{ELEMENTOS.find(e => e.id === element)?.nombre}</span>
+                          <span className="mx-2">•</span>
+                          <span className="text-amber-400 font-bold">{percentage}%</span>
+                          <span className="mx-2">–</span>
+                          <span className="text-white/70">{elementInfoTierra[element as keyof ElementInfoTierra].message}</span>
+                        </div>
+                      );
+                    })}
+                  </div>
+                  <p className="text-white/80 text-center mt-6">Tu tierra es fértil y firme, y con el apoyo de los otros elementos, logras sembrar, cuidar y transformar a largo plazo.</p>
+                </div>
+              )}
+
+              {/* Sección de elementos secundarios - solo para Agua */}
+              {result === 'agua' && (
+                <div className="bg-white/5 backdrop-blur-sm border border-white/10 rounded-lg p-6 mb-8">
+                  <h3 className="text-xl font-bold text-white mb-4 text-center">✨ También habita en ti el equilibrio de los otros elementos:</h3>
+                  <div className="space-y-3">
+                    {Object.entries(letterCounts).map(([letter, count]) => {
+                      const element = letterToElement[letter];
+                      if (element === result) return null;
+                      const total = Object.values(letterCounts).reduce((a, b) => a + b, 0);
+                      const percentage = Math.round((count / total) * 100);
+                      if (percentage === 0) return null;
+                      type ElementInfoAgua = {
+                        fuego: { emoji: string; message: string };
+                        aire: { emoji: string; message: string };
+                        tierra: { emoji: string; message: string };
+                      };
+                      const elementInfoAgua: ElementInfoAgua = {
+                        fuego: { emoji: "🔥", message: "te da el impulso para actuar cuando es necesario." },
+                        aire: { emoji: "🌬️", message: "potencia tu intuición con ideas frescas." },
+                        tierra: { emoji: "🌱", message: "te ayuda a sostener lo que transformas." }
+                      };
+                      if (!(element in elementInfoAgua)) return null;
+                      return (
+                        <div key={letter} className="flex items-center justify-center text-white/90">
+                          <span className="text-2xl mr-2">{elementInfoAgua[element as keyof ElementInfoAgua].emoji}</span>
+                          <span className="font-medium">{ELEMENTOS.find(e => e.id === element)?.nombre}</span>
+                          <span className="mx-2">•</span>
+                          <span className="text-amber-400 font-bold">{percentage}%</span>
+                          <span className="mx-2">–</span>
+                          <span className="text-white/70">{elementInfoAgua[element as keyof ElementInfoAgua].message}</span>
+                        </div>
+                      );
+                    })}
+                  </div>
+                  <p className="text-white/80 text-center mt-6">Tu agua fluye con sabiduría, y los otros elementos la acompañan para crear un camino profundo y generoso.</p>
+                </div>
+              )}
 
               <div className="flex flex-col md:flex-row justify-center items-center gap-4">
-                <Link 
-                  href="/" 
+                <button
+                  onClick={resetCompletely}
                   className="px-6 py-3 rounded-full font-medium text-white transition-all duration-300 bg-gradient-to-r from-amber-500 to-orange-600 hover:from-amber-600 hover:to-orange-700 shadow-lg hover:shadow-xl"
                 >
-                  Volver al Inicio
-                </Link>
+                  Volver al Quiz
+                </button>
               </div>
             </div>
           </div>
