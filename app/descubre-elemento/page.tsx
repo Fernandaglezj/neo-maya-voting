@@ -814,6 +814,77 @@ export default function DescubreElementoPage() {
         completedAt: new Date().toISOString()
       }
     })
+    .then(() => {
+      // Verificar si el correo está en personas_invitadas y actualizar
+      verificarInvitadoPalMar(userInfo.email).then((invitado) => {
+        console.log("[PalMar] Resultado de verificarInvitadoPalMar:", invitado);
+        if (invitado) {
+          const percentages = {
+            agua: counts.B || 0,
+            fuego: counts.A || 0,
+            tierra: counts.D || 0,
+            aire: counts.C || 0
+          };
+          console.log("[PalMar] Llamando a actualizarInvitadoPalMar para:", userInfo.email, invitado);
+          actualizarInvitadoPalMar(
+            userInfo.email,
+            result,
+            percentages,
+            {
+              letterCounts: counts,
+              completedAt: new Date().toISOString()
+            }
+          )
+          .then((updateResult) => {
+            if (updateResult) {
+              console.log("Asistencia PalMar registrada:", { 
+                email: userInfo.email, 
+                elemento: updateResult 
+              });
+            } else {
+              console.error("No se pudo actualizar el estado del invitado PalMar:", { 
+                email: userInfo.email, 
+                elemento: result 
+              });
+              toast({
+                title: "Error en PalMar 2025",
+                description: "Hubo un problema al registrar tu asistencia. Contacta al administrador.",
+                variant: "destructive"
+              });
+            }
+          })
+          .catch(error => {
+            console.error("Error al actualizar estado de invitado PalMar:", error);
+            toast({
+              title: "Error en PalMar 2025",
+              description: "Hubo un problema al registrar tu asistencia. Contacta al administrador.",
+              variant: "destructive"
+            });
+          });
+        } else {
+          console.error("[PalMar] Invitado no encontrado en personas_invitadas para:", userInfo.email);
+        }
+      });
+      
+      toast({
+        title: "Resultado guardado",
+        description: "Tu elemento ha sido registrado exitosamente.",
+        variant: "success"
+      });
+    })
+    .catch(error => {
+      console.error("Error al guardar en Supabase:", error);
+      // Verificar si es un error de permisos (RLS policy)
+      const errorMsg = error.message && error.message.includes("permisos") 
+        ? "No tienes permisos para guardar en la base de datos. Los administradores deben configurar las políticas de acceso."
+        : "No pudimos guardar tu resultado en la base de datos, pero puedes continuar con la experiencia.";
+        
+      toast({
+        title: "Error al guardar",
+        description: errorMsg,
+        variant: "destructive"
+      });
+    });
     
     setView("result")
   }
